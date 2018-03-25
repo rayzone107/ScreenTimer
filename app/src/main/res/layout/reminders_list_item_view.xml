@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/parent_rl"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:foreground="?attr/selectableItemBackground">
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginRight="4dp"
+        tools:visibility="visible" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@id/checkbox"
+        android:gravity="center_vertical"
+        app:cardBackgroundColor="@color/reminder_enabled"
+        app:cardCornerRadius="6dp"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/frequency_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/time_tv"
+                android:layout_alignRight="@id/time_tv"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="1dp"
+                tools:text="Every" />
+
+            <TextView
+                android:id="@+id/time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frequency_tv"
+                android:layout_marginLeft="12dp"
+                android:gravity="bottom|center_horizontal"
+                android:minWidth="90dp"
+                android:textSize="45sp"
+                tools:text="2.5" />
+
+            <TextView
+                android:id="@+id/time_unit_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/time_tv"
+                android:layout_alignTop="@id/time_tv"
+                android:layout_toLeftOf="@id/enabled_switch"
+                android:layout_toRightOf="@id/time_tv"
+                android:gravity="bottom"
+                android:paddingBottom="8dp"
+                android:textSize="20sp"
+                tools:text="hours" />
+
+            <Switch
+                android:id="@+id/enabled_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:checked="true"
+                android:theme="@style/SwitchTheme" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.rachitgoyal.screentimer"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name="com.orm.SugarApp"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="DATABASE"
+            android:value="screen_timer.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.rachitgoyal" />
+
+        <activity
+            android:name=".modules.home.HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".modules.tears.TearsActivity"
+            android:label=""
+            android:parentActivityName=".modules.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rachitgoyal.screentimer.modules.home.HomeActivity" />
+        </activity>
+
+        <service
+            android:name=".service.ScreenTimerService"
+            android:enabled="true">
+        </service>
+
+        <activity
+            android:name=".modules.settings.SettingsActivity"
+            android:label=""
+            android:parentActivityName=".modules.tears.TearsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
+        </activity>
+        <activity
+            android:name=".modules.history.HistoryActivity"
+            android:label="@string/title_activity_history"
+            android:parentActivityName=".modules.tears.TearsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
+        </activity>
+        <activity
+            android:name=".modules.reminder.ReminderActivity"
+            android:label="@string/title_activity_reminder"
+            android:parentActivityName=".modules.tears.TearsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
+        </activity>
+    </application>
+
+</manifest>

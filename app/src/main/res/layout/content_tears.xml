@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/parent_rl"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.rachitgoyal.screentimer.modules.tears.TearsActivity"
+    tools:showIn="@layout/activity_tears">
+
+    <ImageView
+        android:id="@+id/eye_iv"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:maxHeight="100dp"
+        android:src="@drawable/eye" />
+
+    <ImageView
+        android:id="@+id/eye_overlay_iv"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:alpha="0.6"
+        android:maxHeight="100dp"
+        android:src="@drawable/eye_overlay" />
+
+    <com.rachitgoyal.screentimer.wave.WaveView
+        android:id="@+id/wave_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/eye_iv"
+        android:layout_marginTop="40dp"
+        app:wlv_borderWidth="0dp"
+        app:wlv_progressValue="50"
+        app:wlv_round_rectangle="false"
+        app:wlv_shapeType="rectangle"
+        app:wlv_triangle_direction="north"
+        app:wlv_waveAmplitude="10"
+        app:wlv_waveColor="@color/defaultWaterColor"
+        app:wlv_wave_background_Color="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/bar_container_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/wave_view"
+        android:layout_alignTop="@id/wave_view"
+        android:orientation="vertical"
+        android:paddingBottom="10dp" />
+
+</RelativeLayout>
