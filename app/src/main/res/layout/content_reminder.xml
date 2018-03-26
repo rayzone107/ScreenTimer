@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.github.florent37.expansionpanel.ExpansionHeader
+        <com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionHeader
             android:id="@+id/expandable_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
                         android:background="@drawable/icon_bg"
-                        android:padding="6dp"
+                        android:padding="4dp"
                         android:scaleType="centerInside"
                         android:tint="@color/white"
                         app:srcCompat="@drawable/ic_add_white_28px" />
@@ -68,9 +68,9 @@
 
             </io.supercharge.shimmerlayout.ShimmerLayout>
 
-        </com.github.florent37.expansionpanel.ExpansionHeader>
+        </com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionHeader>
 
-        <com.github.florent37.expansionpanel.ExpansionLayout
+        <com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout
             android:id="@+id/expandable_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -86,81 +86,45 @@
                     android:layout_height="2dp"
                     android:background="@color/colorPrimary" />
 
-                    <TimePicker
-                        android:id="@+id/time_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                <TimePicker
+                    android:id="@+id/time_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                    </TimePicker>
-
-                    <!--<com.shawnlin.numberpicker.NumberPicker
-                        android:id="@+id/hour_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:np_max="24"
-                        app:np_min="0"
-                        app:np_value="3"
-
-                        app:np_wrapSelectorWheel="false" />
-
-                    <com.shawnlin.numberpicker.NumberPicker
-                        android:id="@+id/min_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        app:np_max="60"
-                        app:np_min="0"
-                        app:np_wrapSelectorWheel="false" />-->
-
-                <!--<Spinner
-                    android:id="@+id/frequency_spinner"
+                <Button
+                    android:id="@+id/add_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    tools:listitem="@layout/add_reminder_frequency_spinner_list_item" />
+                    android:layout_below="@id/time_picker"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorAccent"
+                    android:elevation="4dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="Add"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
-                <Spinner
-                    android:id="@+id/time_spinner"
+                <ImageView
+                    android:id="@+id/recurring_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/frequency_spinner"
-                    android:layout_toRightOf="@id/frequency_spinner"
-                    tools:listitem="@layout/add_reminder_frequency_spinner_list_item" />
+                    android:layout_alignBottom="@id/add_button"
+                    android:layout_alignTop="@id/add_button"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    app:srcCompat="@drawable/ic_autorenew_black_24px" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/time_spinner"
-                    android:layout_alignTop="@id/time_spinner"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@id/time_spinner"
-                    android:layout_toRightOf="@id/time_spinner"
-                    android:gravity="center_vertical"
-                    android:text="@string/of_usage"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/add_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/time_spinner"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/time_spinner"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/add_icon"
-                    android:padding="8dp"
-                    android:scaleType="center"
-                    android:tint="@android:color/black"
-                    app:srcCompat="@drawable/ic_add_white_28px" />-->
+                    android:layout_above="@id/recurring_iv"
+                    android:text="@string/enable_recurring"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
-        </com.github.florent37.expansionpanel.ExpansionLayout>
+        </com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout>
 
     </RelativeLayout>
 
@@ -178,5 +142,14 @@
         android:clipToPadding="false"
         android:paddingBottom="30dp"
         android:paddingTop="8dp" />
+
+    <View
+        android:id="@+id/shadow_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/expandable_ll"
+        android:background="#64000000"
+        android:clickable="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>

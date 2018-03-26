@@ -20,7 +20,7 @@ import com.rachitgoyal.screentimer.modules.reminder.ReminderActivity;
 import com.rachitgoyal.screentimer.modules.settings.SettingsActivity;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
-import com.rachitgoyal.screentimer.wave.WaveView;
+import com.rachitgoyal.screentimer.libraries.wave.WaveView;
 
 import java.util.List;
 

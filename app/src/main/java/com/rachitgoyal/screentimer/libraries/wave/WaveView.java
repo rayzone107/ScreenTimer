@@ -1,4 +1,4 @@
-package com.rachitgoyal.screentimer.wave;
+package com.rachitgoyal.screentimer.libraries.wave;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

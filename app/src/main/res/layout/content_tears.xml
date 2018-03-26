@@ -28,7 +28,7 @@
         android:maxHeight="100dp"
         android:src="@drawable/eye_overlay" />
 
-    <com.rachitgoyal.screentimer.wave.WaveView
+    <com.rachitgoyal.screentimer.libraries.wave.WaveView
         android:id="@+id/wave_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

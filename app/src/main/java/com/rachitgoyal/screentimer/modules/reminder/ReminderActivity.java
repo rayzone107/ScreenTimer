@@ -1,5 +1,7 @@
 package com.rachitgoyal.screentimer.modules.reminder;
 
+import android.animation.Animator;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -13,7 +15,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.rachitgoyal.screentimer.R;
+import com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionHeader;
+import com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout;
 import com.rachitgoyal.screentimer.model.Reminder;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 
@@ -45,20 +51,20 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     @BindView(R.id.action_delete)
     ImageView mDeleteIV;
 
-    /*@BindView(R.id.frequency_spinner)
-    Spinner mFrequencySpinner;
+    @BindView(R.id.expandable_header)
+    ExpansionHeader mExpansionHeader;
 
-    @BindView(R.id.time_spinner)
-    Spinner mTimeSpinner;
-
-    @BindView(R.id.add_iv)
-    ImageView mAddIV;*/
+    @BindView(R.id.expandable_content)
+    ExpansionLayout mExpansionContent;
 
     @BindView(R.id.time_picker)
     TimePicker mTimePicker;
 
     @BindView(R.id.reminders_rv)
     RecyclerView mRemindersRV;
+
+    @BindView(R.id.shadow_view)
+    View mShadowView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,28 +79,50 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         mRemindersRV.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new RemindersListAdapter(this, mReminderList, mIsDeleteModeEnabled);
         mRemindersRV.setAdapter(mAdapter);
-
         mActionModeCallback = new ActionModeCallback();
-
-        /*mFrequencyList = Arrays.asList(mContext.getResources().getStringArray(R.array.reminder_frequency_list));
-        ReminderSpinnerAdapter frequencySpinnerAdapter = new ReminderSpinnerAdapter(mContext, mFrequencyList);
-        mFrequencySpinner.setAdapter(frequencySpinnerAdapter);
-        mFrequencySpinner.setSelection(0);
-        mTimeList = Arrays.asList(mContext.getResources().getStringArray(R.array.pref_usage_threshold_titles));
-        ReminderSpinnerAdapter timeSpinnerAdapter = new ReminderSpinnerAdapter(mContext, mTimeList);
-        mTimeSpinner.setAdapter(timeSpinnerAdapter);
-        mTimeSpinner.setSelection(7);*/
-
         mTimePicker.setIs24HourView(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTimePicker.setHour(3);
+            mTimePicker.setMinute(0);
+        } else {
+            mTimePicker.setCurrentHour(3);
+            mTimePicker.setCurrentMinute(0);
+        }
 
         mPresenter = new ReminderPresenter(this, mFrequencyList, mTimeList, mReminderList);
         mPresenter.fetchReminders();
-    }
 
-    /*@OnClick(R.id.add_iv)
-    public void addReminder(View view) {
-        mPresenter.addReminder(mTimeSpinner.getSelectedItemPosition(), mFrequencySpinner.getSelectedItemPosition());
-    }*/
+        mExpansionContent.addIndicatorListener(new ExpansionLayout.IndicatorListener() {
+            @Override
+            public void onStartedExpand(ExpansionLayout expansionLayout, final boolean willExpand) {
+                mDeleteIV.setVisibility(willExpand ? View.GONE : View.VISIBLE);
+                YoYo.with(willExpand ? Techniques.FadeIn : Techniques.FadeOut).duration(800)
+                        .withListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                if (willExpand) {
+                                    mShadowView.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                if (!willExpand) {
+                                    mShadowView.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) {
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) {
+                            }
+                        }).playOn(mShadowView);
+            }
+        });
+    }
 
     @OnClick(R.id.action_delete)
     public void deleteClicked(View view) {
@@ -137,11 +165,13 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
                     mActionMode.getMenu().findItem(R.id.action_delete).setVisible(false);
                 }
             }
+            mExpansionHeader.setToggleOnClick(false);
         } else {
             if (mActionMode != null) {
                 mActionMode.finish();
                 mActionMode = null;
             }
+            mExpansionHeader.setToggleOnClick(true);
         }
     }
 
@@ -163,13 +193,15 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
 
     @Override
     public void onBackPressed() {
-        if (mActionMode == null) {
-            super.onBackPressed();
-        } else {
+        if (mActionMode != null) {
             mPresenter.clearAllDeletes();
             toggleActionMode(false);
             mAdapter.setDeleteMode(false);
             mAdapter.notifyDataSetChanged();
+        } else if (mExpansionContent.isExpanded()) {
+            mExpansionContent.collapse(true);
+        } else {
+            super.onBackPressed();
         }
     }
 
