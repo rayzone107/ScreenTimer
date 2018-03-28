@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +42,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     private RemindersListAdapter mAdapter;
     private ActionModeCallback mActionModeCallback;
     private ActionMode mActionMode;
+    private boolean mIsRecurringEnabled;
 
     @BindView(R.id.parent_cl)
     CoordinatorLayout mParentCL;
@@ -59,6 +61,9 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
 
     @BindView(R.id.time_picker)
     TimePicker mTimePicker;
+
+    @BindView(R.id.recurring_iv)
+    ImageView mRecurringIV;
 
     @BindView(R.id.reminders_rv)
     RecyclerView mRemindersRV;
@@ -132,11 +137,27 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         mAdapter.notifyDataSetChanged();
     }
 
+    @OnClick(R.id.add_button)
+    public void addClicked(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mPresenter.addReminder(mTimePicker.getHour(), mTimePicker.getMinute(), mIsRecurringEnabled);
+        } else {
+            mPresenter.addReminder(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(), mIsRecurringEnabled);
+        }
+    }
+
+    @OnClick(R.id.recurring_iv)
+    public void recurringClicked(View view) {
+        mIsRecurringEnabled = !mIsRecurringEnabled;
+        mRecurringIV.setColorFilter(ContextCompat.getColor(mContext, mIsRecurringEnabled ? R.color.enabled_green : R.color.medium_gray));
+    }
+
     @Override
     public void updateReminders(List<Reminder> reminderList) {
         mReminderList.clear();
         mReminderList.addAll(reminderList);
         mAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -148,6 +169,20 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     public void toggleDeleteState(boolean isEnabled) {
         MenuItem deleteItem = mActionMode.getMenu().findItem(R.id.action_delete);
         deleteItem.setVisible(isEnabled);
+    }
+
+    @Override
+    public void toggleAddState(boolean isExpanded) {
+        if (isExpanded) {
+            mExpansionContent.expand(true);
+        } else {
+            mExpansionContent.collapse(true);
+        }
+    }
+
+    @Override
+    public void scrollToEnd() {
+        mRemindersRV.smoothScrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     private void toggleActionMode(boolean isEnabled) {
@@ -199,7 +234,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
             mAdapter.setDeleteMode(false);
             mAdapter.notifyDataSetChanged();
         } else if (mExpansionContent.isExpanded()) {
-            mExpansionContent.collapse(true);
+            toggleAddState(false);
         } else {
             super.onBackPressed();
         }

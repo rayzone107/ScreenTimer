@@ -100,7 +100,7 @@ public class RemindersListAdapter extends RecyclerView.Adapter {
             mCardView.setCardBackgroundColor(
                     ContextCompat.getColor(context, reminder.isEnabled() ? R.color.reminder_enabled : R.color.reminder_disabled));
             mFrequencyTV.setText(reminder.isRecurring() ? "Every" : "At");
-            String time = TimeUtil.getTimeOptionFromMillis(reminder.getMillis());
+            String time = TimeUtil.convertSecondsToHourMins(reminder.getSeconds()) + " hours";
             String[] timeSplit = time.split(" ");
             mTimeTV.setText(timeSplit[0]);
             mTimeUnitTV.setText(timeSplit[1]);
@@ -128,6 +128,8 @@ public class RemindersListAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (isDeleteModeEnabled) {
                         mCheckBox.performClick();
+                    } else {
+                        mEnabledSwitch.performClick();
                     }
                 }
             });

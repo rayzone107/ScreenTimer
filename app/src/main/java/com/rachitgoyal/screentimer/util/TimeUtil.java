@@ -33,7 +33,7 @@ public class TimeUtil {
     private static final int MINUTES_IN_AN_HOUR = 60;
     private static final int SECONDS_IN_A_MINUTE = 60;
 
-    public static String generateTimeFromSeconds(long totalSeconds) {
+    public static String convertSecondsToApproximateTimeString(long totalSeconds) {
         long hours;
         long minutes;
         long seconds;
@@ -71,7 +71,7 @@ public class TimeUtil {
         return timeString;
     }
 
-    public static String convertMillisToString(long totalSeconds) {
+    public static String convertSecondsToExactTimeString(long totalSeconds) {
         long hours = totalSeconds / MINUTES_IN_AN_HOUR / SECONDS_IN_A_MINUTE;
         long minutes = (totalSeconds - (hoursToSeconds(hours)))
                 / SECONDS_IN_A_MINUTE;
@@ -95,7 +95,7 @@ public class TimeUtil {
         return sdf.format(date);
     }
 
-    public static int getMillsFromTimeOption(String timeOption) {
+    public static int convertTimeOptionToSeconds(String timeOption) {
         switch (timeOption) {
             case "15 minutes":
                 return TimeOptions.FIFTEEN_MINS;
@@ -138,8 +138,8 @@ public class TimeUtil {
         }
     }
 
-    public static String getTimeOptionFromMillis(int timeOption) {
-        switch (timeOption) {
+    public static String convertSecondsToTimeOption(int seconds) {
+        switch (seconds) {
             case TimeOptions.FIFTEEN_MINS:
                 return "15 minutes";
             case TimeOptions.THIRTY_MINS:
@@ -258,5 +258,81 @@ public class TimeUtil {
         } else {
             return TWENTY_FOUR_HOURS;
         }
+    }
+
+    public static int calculateGrayedTimeFromTimeOption(int timeOption) {
+        switch (timeOption) {
+            case FIFTEEN_MINS:
+                return THIRTY_MINS;
+            case THIRTY_MINS:
+                return FOURTY_FIVE_MINS;
+            case FOURTY_FIVE_MINS:
+                return ONE_HOUR;
+            case ONE_HOUR:
+                return ONE_HALF_HOUR;
+            case ONE_HALF_HOUR:
+                return TWO_HOURS;
+            case TWO_HOURS:
+                return TWO_HALF_HOURS;
+            case TWO_HALF_HOURS:
+                return THREE_HOURS;
+            case THREE_HOURS:
+                return FOUR_HOURS;
+            case FOUR_HOURS:
+                return FIVE_HOURS;
+            case FIVE_HOURS:
+                return SIX_HOURS;
+            case SIX_HOURS:
+                return EIGHT_HOURS;
+            case EIGHT_HOURS:
+                return TEN_HOURS;
+            case TEN_HOURS:
+                return TWELVE_HOURS;
+            case TWELVE_HOURS:
+                return FIFTEEN_HOURS;
+            case FIFTEEN_HOURS:
+                return EIGHTEEN_HOURS;
+            case EIGHTEEN_HOURS:
+                return TWENTY_ONE_HOURS;
+            case TWENTY_ONE_HOURS:
+                return TWENTY_FOUR_HOURS;
+            case TWENTY_FOUR_HOURS:
+                return TWENTY_FOUR_HOURS;
+            default:
+                return FOUR_HOURS;
+        }
+    }
+
+    public static int convertHourMinToSeconds(int hour, int mins) {
+        return (hour * 3600) + (mins * 60);
+    }
+
+    public static String convertSecondsToHourMins(int seconds) {
+        String time = "";
+        int hours = seconds / 3600;
+        int remainder = seconds - hours * 3600;
+        int mins = remainder / 60;
+
+        if (hours == 0) {
+            if (mins == 1) {
+                time = "1 minute";
+            } else {
+                time = mins + " minutes";
+            }
+        } else if (hours == 1) {
+            if (mins == 0) {
+                time = "1 hour";
+            } else {
+                time = hours + ":" + String.format(Locale.getDefault(), "%02d", mins);
+            }
+        } else {
+            if (mins == 0) {
+                time = hours + " hours";
+            } else {
+                time = hours + ":" + String.format(Locale.getDefault(), "%02d", mins);
+            }
+        }
+
+        return time;
     }
 }

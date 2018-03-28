@@ -79,7 +79,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
 
     @Override
     public void setData() {
-        int allowedTime = TimeUtil.getMillsFromTimeOption(mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
+        int allowedTime = TimeUtil.convertTimeOptionToSeconds(mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class)
                 .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).limit("1").list();
         ScreenUsage screenUsage;
@@ -97,22 +97,22 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         long exceededTime, leftTime, maxTime;
         if (usedTime > allowedTime) {
             exceededTime = usedTime - allowedTime;
-            maxTime = SECONDS_IN_A_DAY - usedTime;
+            maxTime = TimeUtil.getScaleMaxTimeFromExceededUsedTime(usedTime) - usedTime;
 
-            pieValues.add(new PieEntry(allowedTime, TimeUtil.generateTimeFromSeconds(allowedTime)));
-            pieValues.add(new PieEntry(exceededTime, TimeUtil.generateTimeFromSeconds(exceededTime)));
-            pieValues.add(new PieEntry(maxTime, TimeUtil.generateTimeFromSeconds(maxTime)));
+            pieValues.add(new PieEntry(allowedTime, TimeUtil.convertSecondsToApproximateTimeString(allowedTime)));
+            pieValues.add(new PieEntry(exceededTime, TimeUtil.convertSecondsToApproximateTimeString(exceededTime)));
+            pieValues.add(new PieEntry(maxTime, TimeUtil.convertSecondsToApproximateTimeString(maxTime)));
 
             colors.add(Color.rgb(255, 151, 151));
             colors.add(Color.rgb(186, 5, 5));
             colors.add(Color.rgb(211, 211, 211));
         } else {
             leftTime = (screenUsage.getSecondsAllowed() - screenUsage.getSecondsUsed());
-            maxTime = (SECONDS_IN_A_DAY - allowedTime);
+            maxTime = TimeUtil.calculateGrayedTimeFromTimeOption(allowedTime) - allowedTime;
 
-            pieValues.add(new PieEntry(usedTime, TimeUtil.generateTimeFromSeconds(usedTime)));
-            pieValues.add(new PieEntry(leftTime, TimeUtil.generateTimeFromSeconds(leftTime)));
-            pieValues.add(new PieEntry(maxTime, TimeUtil.generateTimeFromSeconds(maxTime)));
+            pieValues.add(new PieEntry(usedTime, TimeUtil.convertSecondsToApproximateTimeString(usedTime)));
+            pieValues.add(new PieEntry(leftTime, TimeUtil.convertSecondsToApproximateTimeString(leftTime)));
+            pieValues.add(new PieEntry(maxTime, TimeUtil.convertSecondsToApproximateTimeString(maxTime)));
 
             colors.add(Color.rgb(255, 151, 151));
             colors.add(Color.GREEN);
@@ -159,7 +159,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         }
 
         mView.setData(data);
-        mView.setCenterText(generateCenterSpannableText(), TimeUtil.convertMillisToString(usedTime));
+        mView.setCenterText(generateCenterSpannableText(), TimeUtil.convertSecondsToExactTimeString(usedTime));
         mView.setLegend(legendEntries);
     }
 

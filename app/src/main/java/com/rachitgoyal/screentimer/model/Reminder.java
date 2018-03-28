@@ -8,13 +8,13 @@ import com.orm.SugarRecord;
 
 public class Reminder extends SugarRecord {
 
-    public static final String millisField = "MILLIS";
+    public static final String secondsField = "SECONDS";
     public static final String isRecurringField = "IS_RECURRING";
     public static final String isEnabledField = "IS_ENABLED";
     public static final String isAllowedTimeReminderField = "IS_ALLOWED_TIME_REMINDER";
     public static final String isDeleteCheckedField = "IS_DELETE_CHECKED";
 
-    private int millis;
+    private int seconds;
     private boolean isRecurring;
     private boolean isEnabled;
     private boolean isAllowedTimeReminder;
@@ -23,33 +23,33 @@ public class Reminder extends SugarRecord {
     public Reminder() {
     }
 
-    public Reminder(int millis, boolean isRecurring) {
-        this.millis = millis;
+    public Reminder(int seconds, boolean isRecurring) {
+        this.seconds = seconds;
         this.isRecurring = isRecurring;
         this.isEnabled = true;
         this.isAllowedTimeReminder = false;
     }
 
-    public Reminder(int millis, boolean isRecurring, boolean isEnabled) {
-        this.millis = millis;
+    public Reminder(int seconds, boolean isRecurring, boolean isEnabled) {
+        this.seconds = seconds;
         this.isRecurring = isRecurring;
         this.isEnabled = isEnabled;
         this.isAllowedTimeReminder = false;
     }
 
-    public Reminder(int millis, boolean isRecurring, boolean isEnabled, boolean isAllowedTimeReminder) {
-        this.millis = millis;
+    public Reminder(int seconds, boolean isRecurring, boolean isEnabled, boolean isAllowedTimeReminder) {
+        this.seconds = seconds;
         this.isRecurring = isRecurring;
         this.isEnabled = isEnabled;
         this.isAllowedTimeReminder = isAllowedTimeReminder;
     }
 
-    public int getMillis() {
-        return millis;
+    public int getSeconds() {
+        return seconds;
     }
 
-    public void setMillis(int millis) {
-        this.millis = millis;
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 
     public boolean isRecurring() {

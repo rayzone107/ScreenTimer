@@ -108,20 +108,19 @@
 
                 <ImageView
                     android:id="@+id/recurring_iv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/add_button"
                     android:layout_alignTop="@id/add_button"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    app:srcCompat="@drawable/ic_autorenew_black_24px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/recurring_iv"
-                    android:text="@string/enable_recurring"
-                    android:textColor="@color/white" />
+                    android:layout_marginRight="20dp"
+                    android:layout_toLeftOf="@id/add_button"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/recurring_reminder"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:tint="@color/medium_gray"
+                    android:tooltipText="@string/recurring_reminder"
+                    app:srcCompat="@drawable/ic_repeat" />
             </RelativeLayout>
 
         </com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout>

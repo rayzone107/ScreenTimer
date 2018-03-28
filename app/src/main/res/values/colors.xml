@@ -19,4 +19,5 @@
     <color name="medium_gray">#c7c7c7</color>
     <color name="history_bg_start">#6b8ea7</color>
     <color name="history_bg">#294a62</color>
+    <color name="enabled_green">#44C553</color>
 </resources>

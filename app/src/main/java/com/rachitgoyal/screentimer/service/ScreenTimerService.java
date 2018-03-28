@@ -103,11 +103,11 @@ public class ScreenTimerService extends Service {
                         limit("1").list();
         ScreenUsage screenUsage;
         if (screenUsageList.isEmpty()) {
-            screenUsage = new ScreenUsage(TimeUtil.getDateAsFormattedString(new Date()), 0, TimeUtil.getMillsFromTimeOption(selectedTime));
+            screenUsage = new ScreenUsage(TimeUtil.getDateAsFormattedString(new Date()), 0, TimeUtil.convertTimeOptionToSeconds(selectedTime));
         } else {
             screenUsage = screenUsageList.get(0);
             screenUsage.setSecondsUsed(screenUsage.getSecondsUsed() + 1);
-            screenUsage.setSecondsAllowed(TimeUtil.getMillsFromTimeOption(selectedTime));
+            screenUsage.setSecondsAllowed(TimeUtil.convertTimeOptionToSeconds(selectedTime));
         }
         screenUsage.save();
 
@@ -119,10 +119,10 @@ public class ScreenTimerService extends Service {
 
         for (Reminder reminder : reminderList) {
             if (reminder.isEnabled()) {
-                if (!reminder.isRecurring() && reminder.getMillis() == screenUsage.getSecondsUsed()) {
+                if (!reminder.isRecurring() && reminder.getSeconds() == screenUsage.getSecondsUsed()) {
                     sendReminder(screenUsage);
                     break;
-                } else if (reminder.isRecurring() && (float) screenUsage.getSecondsUsed() % (float) reminder.getMillis() == 0) {
+                } else if (reminder.isRecurring() && (float) screenUsage.getSecondsUsed() % (float) reminder.getSeconds() == 0) {
                     sendReminder(screenUsage);
                 }
             }
@@ -148,7 +148,7 @@ public class ScreenTimerService extends Service {
         } else {
             title = "Protect your eyes";
             message = "You've used your device over " +
-                    TimeUtil.generateTimeFromSeconds(screenUsage.getSecondsUsed()) +
+                    TimeUtil.convertSecondsToApproximateTimeString(screenUsage.getSecondsUsed()) +
                     ". You should rest your eyes.";
         }
 

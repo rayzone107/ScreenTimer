@@ -33,16 +33,9 @@ public class ReminderPresenter implements ReminderContract.Presenter {
     }
 
     @Override
-    public void addReminder(int timePosition, int frequencyPosition) {
-        int reminderTime = TimeUtil.getMillsFromTimeOption(mTimeList.get(timePosition));
-        switch (mFrequencyList.get(frequencyPosition)) {
-            case "Every":
-                addReminder(reminderTime, true);
-                break;
-            case "At":
-                addReminder(reminderTime, false);
-                break;
-        }
+    public void addReminder(int hours, int mins, boolean isRecurring) {
+        int reminderTime = TimeUtil.convertHourMinToSeconds(hours, mins);
+        addReminder(reminderTime, isRecurring);
     }
 
     @Override
@@ -90,9 +83,9 @@ public class ReminderPresenter implements ReminderContract.Presenter {
         boolean alreadyExists = false;
         List<Reminder> reminderList = Select.from(Reminder.class).list();
         for (Reminder reminder : reminderList) {
-            if (reminderTime == reminder.getMillis() && isRecurring == reminder.isRecurring()) {
+            if (reminderTime == reminder.getSeconds() && isRecurring == reminder.isRecurring()) {
                 String message = "A ".concat(isRecurring ? "recurring " : "")
-                        .concat("reminder at ").concat(TimeUtil.getTimeOptionFromMillis(reminderTime))
+                        .concat("reminder at ").concat(TimeUtil.convertSecondsToTimeOption(reminderTime))
                         .concat(" already exists.");
                 alreadyExists = true;
                 mView.showMessageSnackbar(message);
@@ -102,7 +95,9 @@ public class ReminderPresenter implements ReminderContract.Presenter {
             Reminder reminder = new Reminder(reminderTime, isRecurring);
             reminder.save();
             mReminderList.add(reminder);
+            mView.toggleAddState(false);
             mView.updateReminders(mReminderList);
+            mView.scrollToEnd();
         }
     }
 }

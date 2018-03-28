@@ -65,7 +65,7 @@ public class TearsPresenter implements TearsContract.Presenter {
     }
 
     private int getAllowedTime() {
-        return TimeUtil.getMillsFromTimeOption(mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
+        return TimeUtil.convertTimeOptionToSeconds(mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class TearsPresenter implements TearsContract.Presenter {
             currentPercentage = ((float) mMillisUsed / scaleMaxTime) * allowedPercentage;
         }
         mView.setData(currentPercentage, calculateWaterColor(allowedTime),
-                TimeUtil.convertMillisToString(mMillisUsed), calculateEyeOverlayOpacity(mMillisUsed, allowedTime));
+                TimeUtil.convertSecondsToExactTimeString(mMillisUsed), calculateEyeOverlayOpacity(mMillisUsed, allowedTime));
     }
 
     private int calculateWaterColor(int allowedTime) {

@@ -15,12 +15,16 @@ public interface ReminderContract {
         void showMessageSnackbar(String message);
 
         void toggleDeleteState(boolean isEnabled);
+
+        void toggleAddState(boolean isExpanded);
+
+        void scrollToEnd();
     }
 
     interface Presenter {
         void fetchReminders();
 
-        void addReminder(int timePosition, int frequencyPosition);
+        void addReminder(int hours, int mins, boolean isRecurring);
 
         void updateReminder(Reminder reminder, boolean isEnabled);
 

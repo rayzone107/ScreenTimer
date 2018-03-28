@@ -52,9 +52,10 @@
                 android:layout_below="@id/frequency_tv"
                 android:layout_marginLeft="12dp"
                 android:gravity="bottom|center_horizontal"
-                android:minWidth="90dp"
+                android:minWidth="50dp"
+                android:paddingLeft="20dp"
                 android:textSize="45sp"
-                tools:text="2.5" />
+                tools:text="2" />
 
             <TextView
                 android:id="@+id/time_unit_tv"
@@ -62,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/time_tv"
                 android:layout_alignTop="@id/time_tv"
+                android:layout_marginLeft="6dp"
                 android:layout_toLeftOf="@id/enabled_switch"
                 android:layout_toRightOf="@id/time_tv"
                 android:gravity="bottom"
