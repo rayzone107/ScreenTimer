@@ -1,10 +1,6 @@
 package com.rachitgoyal.screentimer.modules.history.day;
 
-import android.text.SpannableString;
-
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.LegendEntry;
-import com.github.mikephil.charting.data.PieData;
+import com.rachitgoyal.screentimer.model.ScreenUsage;
 
 import java.util.List;
 
@@ -14,20 +10,18 @@ import java.util.List;
 
 public class DayHistoryContract {
     public interface View {
-        void setData(PieData data);
+        void setData(List<ScreenUsage> screenUsageList);
 
-        void setCenterText(SpannableString centerText, String s);
+        void updateTodayData(ScreenUsage screenUsage);
 
-        void setAngle(float angle);
-
-        void setLegend(List<LegendEntry> legendEntries);
-
-        void setLabelColor(int color);
+        void setEmoticon(int emoticon);
     }
 
     public interface Presenter {
-        void setupChart(PieChart chart);
+        void fetchData();
 
-        void setData();
+        void updateData();
+
+        void calculateForEmoticon(ScreenUsage screenUsage);
     }
 }

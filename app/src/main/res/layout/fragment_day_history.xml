@@ -1,52 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.rachitgoyal.screentimer.modules.history.day.DayHistoryFragment">
 
+    <TextView
+        android:id="@+id/date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:textColor="#e2fffb"
+        android:textSize="30sp"
+        tools:text="27/08/2018"
+        tools:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/emoticon_iv"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/date_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/neutral" />
+
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:dsv_orientation="horizontal"
-        app:fastScrollEnabled="true"
-        app:reverseLayout="true"
-        app:stackFromEnd="true" />
-
-    <TextView
-        android:id="@+id/todays_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@id/emoticon_iv"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        android:text="@string/todays_screen_usage"
-        android:textColor="#e2fffb"
-        android:textSize="34sp" />
-
-    <TextView
-        android:id="@+id/time_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/todays_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
-        android:gravity="center_horizontal"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        tools:text="14:20:34" />
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/timer_chart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/time_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingBottom="40dp" />
+        android:layout_marginBottom="28dp"
+        android:layout_marginTop="8dp" />
 
 </RelativeLayout>

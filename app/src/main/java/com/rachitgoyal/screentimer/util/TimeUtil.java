@@ -1,5 +1,14 @@
 package com.rachitgoyal.screentimer.util;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.SuperscriptSpan;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -334,5 +343,54 @@ public class TimeUtil {
         }
 
         return time;
+    }
+
+    public static SpannableString convertStringDateToFormattedString(String stringDate) {
+
+        DateTimeFormatter fromFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter toFormatter = DateTimeFormat.forPattern("dd MMM, yyyy");
+
+        try {
+            DateTime setDate = fromFormatter.parseDateTime(stringDate);
+            DateTime today = DateTime.now();
+            DateTime yesterday = DateTime.now().minusDays(1);
+
+            if (setDate.toLocalDate().equals(today.toLocalDate())) {
+                SpannableString todaySpan = new SpannableString("Today");
+                todaySpan.setSpan(new RelativeSizeSpan(1.3f), 0, todaySpan.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return todaySpan;
+            } else if (setDate.toLocalDate().equals(yesterday.toLocalDate())) {
+                SpannableString todaySpan = new SpannableString("Yesterday");
+                todaySpan.setSpan(new RelativeSizeSpan(1.3f), 0, todaySpan.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return todaySpan;
+            } else {
+                String formattedDate = toFormatter.print(setDate);
+                formattedDate = formattedDate.substring(0, 2) + getDayOfMonthSuffix(setDate.getDayOfMonth()) +
+                        formattedDate.substring(2, formattedDate.length());
+
+                SpannableString spannableString = new SpannableString(formattedDate);
+                spannableString.setSpan(new SuperscriptSpan(), 2, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(new RelativeSizeSpan(0.6f), 2, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return spannableString;
+            }
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    public static String getDayOfMonthSuffix(final int n) {
+        if (n >= 11 && n <= 13) {
+            return "th";
+        }
+        switch (n % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
     }
 }
