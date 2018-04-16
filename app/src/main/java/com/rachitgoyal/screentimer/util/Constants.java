@@ -13,6 +13,8 @@ import java.util.List;
 public class Constants {
 
     public static final int TIME_BAR_ID = 11111;
+    public static final String NOTIFICATION_CHANNEL_ID = "GAZE_AWAY";
+    public static final String NOTIFICATION_CHANNEL_NAME = "Gaze Away";
 
     public static final List<String> timeOptions = Arrays.asList("15 minutes",
             "30 minutes",

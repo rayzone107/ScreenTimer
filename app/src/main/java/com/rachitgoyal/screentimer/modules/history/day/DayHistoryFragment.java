@@ -10,15 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
 import com.rachitgoyal.screentimer.modules.base.BaseFragment;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
-import com.rachitgoyal.screentimer.util.TimeUtil;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
@@ -37,12 +34,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
     private List<ScreenUsage> mScreenUsageList = new ArrayList<>();
 
     private DayHistoryPagerAdapter mAdapter;
-
-    @BindView(R.id.date_tv)
-    TextView mDateTV;
-
-    @BindView(R.id.emoticon_iv)
-    ImageView mEmoticonIV;
 
     @BindView(R.id.view_pager)
     DiscreteScrollView mViewPager;
@@ -75,11 +66,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         return view;
     }
 
-    @OnClick(R.id.date_tv)
-    public void onDateClicked(View view) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, this, 23, 3, 2018);
-    }
-
     @Override
     public void setData(List<ScreenUsage> screenUsageList) {
         mScreenUsageList.clear();
@@ -87,28 +73,10 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         mAdapter.setScreenUsageList(screenUsageList);
         mAdapter.notifyDataSetChanged();
         mViewPager.scrollToPosition(mScreenUsageList.size() - 1);
-        onItemChanged(mScreenUsageList.get(mScreenUsageList.size() - 1));
-    }
-
-    @Override
-    public void updateTodayData(ScreenUsage screenUsage) {
-        /*mScreenUsageList.set(mScreenUsageList.size() - 1, screenUsage);
-        mAdapter.notifyItemChanged(mScreenUsageList.size() - 1);*/
-    }
-
-    @Override
-    public void setEmoticon(int emoticon) {
-        mEmoticonIV.setImageResource(emoticon);
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
-    }
-
-    private void onItemChanged(ScreenUsage screenUsage) {
-        mDateTV.setText(TimeUtil.convertStringDateToFormattedString(screenUsage.getDate()));
-        mPresenter.calculateForEmoticon(screenUsage);
     }
 
     @Override
@@ -118,7 +86,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
 
     @Override
     public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
-        onItemChanged(mScreenUsageList.get(adapterPosition));
     }
 
     @Override

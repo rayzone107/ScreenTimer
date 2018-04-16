@@ -118,9 +118,8 @@
                     android:contentDescription="@string/recurring_reminder"
                     android:gravity="center_horizontal"
                     android:padding="8dp"
-                    android:tint="@color/medium_gray"
                     android:tooltipText="@string/recurring_reminder"
-                    app:srcCompat="@drawable/ic_repeat" />
+                    android:src="@drawable/recurring_disabled" />
             </RelativeLayout>
 
         </com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout>

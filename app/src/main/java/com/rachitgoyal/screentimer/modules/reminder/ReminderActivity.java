@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -149,7 +148,31 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     @OnClick(R.id.recurring_iv)
     public void recurringClicked(View view) {
         mIsRecurringEnabled = !mIsRecurringEnabled;
-        mRecurringIV.setColorFilter(ContextCompat.getColor(mContext, mIsRecurringEnabled ? R.color.enabled_green : R.color.medium_gray));
+//        mRecurringIV.setColorFilter(ContextCompat.getColor(mContext, mIsRecurringEnabled ? R.color.enabled_green : R.color.medium_gray));
+        YoYo.with(Techniques.RotateIn)
+                .duration(500)
+                .withListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        mRecurringIV.setImageResource(mIsRecurringEnabled ? R.drawable.recurring_enabled : R.drawable.recurring_disabled);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                })
+                .playOn(findViewById(R.id.recurring_iv));
     }
 
     @Override

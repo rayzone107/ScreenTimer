@@ -80,6 +80,44 @@ public class TimeUtil {
         return timeString;
     }
 
+    public static String convertSecondsToNotificationTimeString(long totalSeconds) {
+        long hours;
+        long minutes;
+        long seconds;
+
+        String timeString = "";
+
+        hours = totalSeconds / MINUTES_IN_AN_HOUR / SECONDS_IN_A_MINUTE;
+        minutes = (totalSeconds - (hoursToSeconds(hours)))
+                / SECONDS_IN_A_MINUTE;
+        seconds = totalSeconds
+                - ((hoursToSeconds(hours)) + (minutesToSeconds(minutes)));
+
+        if (hours == 0) {
+            if (minutes == 0) {
+                if (seconds == 1) {
+                    timeString = String.valueOf(seconds).concat(" second");
+                } else {
+                    timeString = String.valueOf(seconds).concat(" seconds");
+                }
+            } else if (minutes == 1) {
+                timeString = String.valueOf(minutes).concat(" minute");
+            } else {
+                timeString = String.valueOf(minutes).concat(" minutes");
+            }
+        } else {
+            if (hours == 1 && minutes == 0) {
+                timeString = String.valueOf(hours).concat(" hour");
+            } else if (minutes == 0) {
+                timeString = String.valueOf(hours).concat(" hours");
+            } else {
+                timeString = String.valueOf(hours).concat(" hours and ").concat(String.format(Locale.getDefault(), "%02d", minutes)).concat(" minutes");
+            }
+        }
+
+        return timeString;
+    }
+
     public static String convertSecondsToExactTimeString(long totalSeconds) {
         long hours = totalSeconds / MINUTES_IN_AN_HOUR / SECONDS_IN_A_MINUTE;
         long minutes = (totalSeconds - (hoursToSeconds(hours)))

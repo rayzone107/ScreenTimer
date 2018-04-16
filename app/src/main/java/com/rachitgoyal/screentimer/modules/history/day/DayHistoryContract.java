@@ -11,17 +11,9 @@ import java.util.List;
 public class DayHistoryContract {
     public interface View {
         void setData(List<ScreenUsage> screenUsageList);
-
-        void updateTodayData(ScreenUsage screenUsage);
-
-        void setEmoticon(int emoticon);
     }
 
     public interface Presenter {
         void fetchData();
-
-        void updateData();
-
-        void calculateForEmoticon(ScreenUsage screenUsage);
     }
 }

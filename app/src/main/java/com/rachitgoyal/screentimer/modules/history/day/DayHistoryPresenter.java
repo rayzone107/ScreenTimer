@@ -1,7 +1,6 @@
 package com.rachitgoyal.screentimer.modules.history.day;
 
 import com.orm.query.Select;
-import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
 
 import java.text.ParseException;
@@ -28,28 +27,6 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
         Collections.sort(screenUsageList, new StringDateComparator());
         mView.setData(screenUsageList);
-    }
-
-    @Override
-    public void updateData() {
-        List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
-        mView.updateTodayData(screenUsageList.get(screenUsageList.size() - 1));
-    }
-
-    @Override
-    public void calculateForEmoticon(ScreenUsage screenUsage) {
-        if (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() / 2) {
-            mView.setEmoticon(R.drawable.extra_happy);
-        } else if (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() - 100) {
-            mView.setEmoticon(R.drawable.happy);
-        } else if ((screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed() - 100) &&
-                (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() + 100)) {
-            mView.setEmoticon(R.drawable.neutral);
-        } else if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed() * 2) {
-            mView.setEmoticon(R.drawable.extra_sad);
-        } else {
-            mView.setEmoticon(R.drawable.sad);
-        }
     }
 
     class StringDateComparator implements Comparator<ScreenUsage> {

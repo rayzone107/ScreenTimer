@@ -11,6 +11,8 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -28,7 +30,6 @@ import com.rachitgoyal.screentimer.util.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,11 +76,15 @@ public class DayHistoryPagerAdapter extends RecyclerView.Adapter<DayHistoryPager
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private PieChart mPieChart;
+        private TextView mDateTV;
+        private ImageView mEmoticonTV;
         private boolean isChartSetup = false;
 
         ViewHolder(View itemView) {
             super(itemView);
             mPieChart = itemView.findViewById(R.id.timer_chart);
+            mDateTV = itemView.findViewById(R.id.date_tv);
+            mEmoticonTV = itemView.findViewById(R.id.emoticon_iv);
         }
 
         void bindData(ScreenUsage screenUsage) {
@@ -92,7 +97,7 @@ public class DayHistoryPagerAdapter extends RecyclerView.Adapter<DayHistoryPager
 
         private void setupChart() {
             mPieChart.setUsePercentValues(false);
-            mPieChart.setExtraOffsets(0, 0, 0, 0);
+            mPieChart.setExtraOffsets(10, 10, 10, 10);
 
             mPieChart.setDragDecelerationFrictionCoef(0.95f);
 
@@ -164,14 +169,15 @@ public class DayHistoryPagerAdapter extends RecyclerView.Adapter<DayHistoryPager
             data.setDrawValues(false);
 
             mPieChart.setData(data);
-//            mPieChart.highlightValues(null);
-//            mPieChart.invalidate();
 
             mPieChart.setCenterText(generateCenterSpannableText(usedTime));
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            if (screenUsage.getDate().equals(sdf.format(new Date()))) {
+            /*if (screenUsage.getDate().equals(sdf.format(new Date()))) {
                 setLegendIfToday(usedTime, allowedTime);
-            }
+            }*/
+
+            mEmoticonTV.setImageResource(calculateForEmoticon(screenUsage));
+            mDateTV.setText(TimeUtil.convertStringDateToFormattedString(screenUsage.getDate()));
         }
 
         private void setLegendIfToday(long usedTime, int allowedTime) {
@@ -215,11 +221,25 @@ public class DayHistoryPagerAdapter extends RecyclerView.Adapter<DayHistoryPager
             SpannableString s = new SpannableString(TimeUtil.convertSecondsToExactTimeString(usedTime));
             s.setSpan(new RelativeSizeSpan(2.0f), 0, s.length(), 0);
             s.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
-//            s.setSpan(new ForegroundColorSpan(Color.rgb(0, 191, 255)), 0, 4, 0);
             s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
             s.setSpan(new CustomTypefaceSpan(Typeface.createFromAsset(mPieChart.getContext().getAssets(), "fonts/OpenSans-BoldItalic.ttf")),
                     0, s.length(), 0);
             return s;
+        }
+
+        private int calculateForEmoticon(ScreenUsage screenUsage) {
+            if (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() / 2) {
+                return R.drawable.extra_happy;
+            } else if (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() - 100) {
+                return R.drawable.happy;
+            } else if ((screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed() - 100) &&
+                    (screenUsage.getSecondsUsed() < screenUsage.getSecondsAllowed() + 100)) {
+                return R.drawable.neutral;
+            } else if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed() * 2) {
+                return R.drawable.extra_sad;
+            } else {
+                return R.drawable.sad;
+            }
         }
     }
 }

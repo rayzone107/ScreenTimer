@@ -1,6 +1,7 @@
 package com.rachitgoyal.screentimer.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -31,6 +32,8 @@ public class ScreenTimerService extends Service {
     private BroadcastReceiver mScreenStateReceiver;
     private Handler mHandler;
     private Runnable mRunnable;
+    private Notification.Builder mNotificationBuilder;
+    private NotificationManager mNotificationManager;
 
     public ScreenTimerService() {
     }
@@ -45,15 +48,27 @@ public class ScreenTimerService extends Service {
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                         notificationIntent, 0);
 
-                Notification.Builder notificationBuilder = new Notification.Builder(this)
-                        .setContentTitle("Gaze Away")
+                mNotificationBuilder = new Notification.Builder(this)
+                        .setContentTitle("Today's Usage: ")
                         .setContentIntent(pendingIntent)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-                Notification notification = notificationBuilder.build();
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID,
+                            Constants.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
+                    if (mNotificationManager != null) {
+                        mNotificationManager.createNotificationChannel(channel);
+                    }
+
+                    mNotificationBuilder.setChannelId(Constants.NOTIFICATION_CHANNEL_ID);
+                }
 
                 startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
-                        notification);
+                        mNotificationBuilder.build());
 
                 mScreenStateReceiver = new ScreenStateReceiver();
                 IntentFilter screenStateFilter = new IntentFilter();
@@ -82,6 +97,7 @@ public class ScreenTimerService extends Service {
                 mHandler.postDelayed(this, 1000);
                 updateDatabase();
                 sendBroadcastToActivity();
+                updateNotification();
             }
         };
         mHandler.postDelayed(mRunnable, 1000);
@@ -157,14 +173,34 @@ public class ScreenTimerService extends Service {
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentIntent(pendingIntent)
                 .setSound(soundUri)
-                .setOngoing(exceededLimit);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                .setOngoing(false);
         Notification notification = new Notification.BigTextStyle(notificationBuilder).bigText(message).build();
-        notificationManager.notify(Constants.NOTIFICATION_ID.REMINDER, notification);
+        if (mNotificationManager != null) {
+            mNotificationManager.notify(Constants.NOTIFICATION_ID.REMINDER, notification);
+        }
     }
 
     private void sendBroadcastToActivity() {
         sendBroadcast(new Intent(Constants.ACTION.UPDATE_TIMER));
+    }
+
+    private void updateNotification() {
+
+        List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class)
+                .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).
+                        limit("1").list();
+
+        ScreenUsage screenUsage = screenUsageList.get(0);
+        mNotificationBuilder.setContentTitle("Today's Usage: " + TimeUtil.convertSecondsToNotificationTimeString(screenUsage.getSecondsUsed()));
+
+        if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
+            long timeExceeded = screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
+            String exceededTime = TimeUtil.convertSecondsToApproximateTimeString(timeExceeded);
+            String message = "You've exceeded usage by " + exceededTime + ".";
+            mNotificationBuilder.setContentText(message);
+        }
+
+        mNotificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotificationBuilder.build());
     }
 
     @Override

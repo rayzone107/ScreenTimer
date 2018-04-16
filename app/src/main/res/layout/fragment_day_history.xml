@@ -4,28 +4,6 @@
                 android:layout_height="match_parent"
                 tools:context="com.rachitgoyal.screentimer.modules.history.day.DayHistoryFragment">
 
-    <TextView
-        android:id="@+id/date_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
-        android:paddingTop="10dp"
-        android:textColor="#e2fffb"
-        android:textSize="30sp"
-        tools:text="27/08/2018"
-        tools:textColor="@color/black" />
-
-    <ImageView
-        android:id="@+id/emoticon_iv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/date_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/neutral" />
-
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
