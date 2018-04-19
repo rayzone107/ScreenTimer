@@ -122,6 +122,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
         mWave.setProgressValue(progress);
         mWave.setWaveColor(waveColor);
         mWave.setCenterTitle(timeValue);
+        mWave.setCenterTitleSize(20f);
         if (progress > 55) {
             mWave.setCenterTitleColor(Color.WHITE);
         }

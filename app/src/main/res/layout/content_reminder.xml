@@ -13,7 +13,8 @@
         android:id="@+id/expandable_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:visibility="visible">
 
         <com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionHeader
             android:id="@+id/expandable_header"
@@ -31,11 +32,11 @@
                 app:shimmer_angle="45"
                 app:shimmer_animation_duration="3000"
                 app:shimmer_auto_start="true"
-                app:shimmer_color="#8be1e1e1">
+                app:shimmer_color="@color/shimmer">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="56dp"
                     android:background="@color/transparent">
 
                     <TextView
@@ -48,13 +49,13 @@
                         android:text="@string/add_reminder"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/add_icon_iv"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
@@ -75,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/expandable_header"
-            tools:expansion_expanded="true">
+            tools:expansion_expanded="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -95,7 +96,7 @@
                 <Button
                     android:id="@+id/add_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_below="@id/time_picker"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
@@ -105,7 +106,7 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text="Add"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/recurring_iv"
@@ -142,12 +143,61 @@
         android:paddingBottom="30dp"
         android:paddingTop="8dp" />
 
+    <RelativeLayout
+        android:id="@+id/no_reminder_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/expandable_ll"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/arrow" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/no_reminder_iv"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:tint="@color/medium_gray"
+                app:srcCompat="@drawable/ic_add_alert" />
+
+            <TextView
+                android:id="@+id/no_reminder_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/no_reminder_iv"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/no_reminders"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
     <View
         android:id="@+id/shadow_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/expandable_ll"
-        android:background="#64000000"
+        android:background="@color/reminder_shadow"
         android:clickable="true"
         android:visibility="invisible" />
 

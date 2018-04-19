@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -67,6 +68,9 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     @BindView(R.id.reminders_rv)
     RecyclerView mRemindersRV;
 
+    @BindView(R.id.no_reminder_rl)
+    RelativeLayout mNoReminderRL;
+
     @BindView(R.id.shadow_view)
     View mShadowView;
 
@@ -75,8 +79,6 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
         ButterKnife.bind(this);
-        mToolbar.setTitle("");
-        mToolbar.getBackground().setAlpha(0);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -99,7 +101,11 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         mExpansionContent.addIndicatorListener(new ExpansionLayout.IndicatorListener() {
             @Override
             public void onStartedExpand(ExpansionLayout expansionLayout, final boolean willExpand) {
-                mDeleteIV.setVisibility(willExpand ? View.GONE : View.VISIBLE);
+                if (!mReminderList.isEmpty()) {
+                    mDeleteIV.setVisibility(willExpand ? View.GONE : View.VISIBLE);
+                } else {
+                    YoYo.with(willExpand ? Techniques.FadeOut : Techniques.FadeIn).duration(300).playOn(mNoReminderRL);
+                }
                 YoYo.with(willExpand ? Techniques.FadeIn : Techniques.FadeOut).duration(800)
                         .onStart(new YoYo.AnimatorCallback() {
                             @Override
@@ -143,6 +149,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         mIsRecurringEnabled = !mIsRecurringEnabled;
         YoYo.with(Techniques.RotateIn)
                 .duration(500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
                 .onEnd(new YoYo.AnimatorCallback() {
                     @Override
                     public void call(Animator animator) {
@@ -155,8 +162,19 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     public void updateReminders(List<Reminder> reminderList) {
         mReminderList.clear();
         mReminderList.addAll(reminderList);
+//        mNoReminderRL.setVisibility(mReminderList.isEmpty() ? View.VISIBLE : View.GONE);
+        if (mReminderList.isEmpty() && mNoReminderRL.getVisibility() == View.GONE) {
+            YoYo.with(Techniques.SlideInUp).duration(400).onStart(new YoYo.AnimatorCallback() {
+                @Override
+                public void call(Animator animator) {
+                    mNoReminderRL.setVisibility(View.VISIBLE);
+                }
+            }).playOn(mNoReminderRL);
+        } else if (!mReminderList.isEmpty()) {
+            mNoReminderRL.setVisibility(View.GONE);
+        }
+        mDeleteIV.setVisibility(mReminderList.isEmpty() ? View.GONE : View.VISIBLE);
         mAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -177,6 +195,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         } else {
             mExpansionContent.collapse(true);
         }
+
     }
 
     @Override
@@ -196,7 +215,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
                 }
                 mActionMode = startSupportActionMode(mActionModeCallback);
                 if (mActionMode != null && !isDeleteEnabled) {
-                    mActionMode.setTitle("Select Reminders to Delete");
+                    mActionMode.setTitle("Select");
                     mActionMode.setTitleOptionalHint(true);
                     mActionMode.getMenu().findItem(R.id.action_delete).setVisible(false);
                 }

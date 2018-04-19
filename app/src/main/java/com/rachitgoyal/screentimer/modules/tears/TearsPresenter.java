@@ -74,11 +74,14 @@ public class TearsPresenter implements TearsContract.Presenter {
     }
 
     private void addDefaultReminder(int allowedTime) {
-        List<Reminder> reminderList = Select.from(Reminder.class)
-                .where(Condition.prop(Reminder.isAllowedTimeReminderField).eq("1")).list();
-        if (reminderList.isEmpty()) {
-            Reminder reminder = new Reminder(allowedTime, false, true, true);
-            reminder.save();
+        if (Prefs.getBoolean(Constants.PREFERENCES.HAS_ADDED_DEFAULT_REMINDER, false)) {
+            List<Reminder> reminderList = Select.from(Reminder.class)
+                    .where(Condition.prop(Reminder.isAllowedTimeReminderField).eq("1")).list();
+            if (reminderList.isEmpty()) {
+                Reminder reminder = new Reminder(allowedTime, false, true, true);
+                reminder.save();
+                Prefs.putBoolean(Constants.PREFERENCES.HAS_ADDED_DEFAULT_REMINDER, true);
+            }
         }
     }
 

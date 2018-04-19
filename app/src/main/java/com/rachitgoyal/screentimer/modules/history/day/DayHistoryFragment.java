@@ -154,20 +154,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
             }
         }).playOn(mTimerContainer);
 
-        /*YoYo.with(outTechnique).duration(400).onEnd(new YoYo.AnimatorCallback() {
-            @Override
-            public void call(Animator animator) {
-                YoYo.with(inTechnique).duration(400).playOn(mDateContainer);
-            }
-        }).playOn(mDateContainer);
-
-        YoYo.with(outTechnique).duration(400).onEnd(new YoYo.AnimatorCallback() {
-            @Override
-            public void call(Animator animator) {
-                YoYo.with(inTechnique).duration(400).playOn(mEmoticonIV);
-            }
-        }).playOn(mEmoticonIV);*/
-
         YoYo.with(Techniques.SlideOutUp).duration(400).onEnd(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {

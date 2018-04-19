@@ -35,4 +35,5 @@
     <style name="ToolbarDark" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/white</item>
     </style>
+
 </resources>

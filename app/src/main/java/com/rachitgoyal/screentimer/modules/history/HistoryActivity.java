@@ -3,7 +3,6 @@ package com.rachitgoyal.screentimer.modules.history;
 import android.content.Context;
 import android.content.res.Resources.Theme;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -39,7 +38,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
                 toolbar.getContext(),
                 new String[]{
                         "Day",
-                        "Week",
                         "Month"
                 }));
 
@@ -56,11 +54,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
                                 .commit();
                         break;
                     case 1:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, WeekHistoryFragment.newInstance())
-                                .commit();
-                        break;
-                    case 2:
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container, MonthHistoryFragment.newInstance())
                                 .commit();

@@ -215,9 +215,9 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
     @Override
     public SpannableString generateCenterSpannableText(Context context, long usedTime) {
         SpannableString s = new SpannableString(TimeUtil.convertSecondsToExactTimeString(usedTime));
-        s.setSpan(new RelativeSizeSpan(2.0f), 0, s.length(), 0);
+        s.setSpan(new RelativeSizeSpan(1.5f), 0, s.length(), 0);
         s.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
         s.setSpan(new CustomTypefaceSpan(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-BoldItalic.ttf")),
                 0, s.length(), 0);
         return s;
@@ -261,12 +261,18 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
         Collections.sort(screenUsageList, new StringDateComparator());
 
-        int displayedPosition = 0;
-        for (int i = 0; i < screenUsageList.size(); i++) {
+        int displayedPosition = screenUsageList.size() - 1;
+        for (int i = screenUsageList.size() - 1; i >= 0; i--) {
             ScreenUsage screenUsage = screenUsageList.get(i);
-            if (screenUsage.getDate().equals(mDisplayedDate)) {
-                displayedPosition = i;
-                break;
+            try {
+                if (screenUsage.getDate().equals(mDisplayedDate) ||
+                        TimeUtil.sdf.parse(screenUsage.getDate()).after(TimeUtil.sdf.parse(mDisplayedDate))) {
+                    displayedPosition = i;
+                } else {
+                    break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
 
@@ -284,9 +290,15 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         int displayedPosition = screenUsageList.size() - 1;
         for (int i = 0; i < screenUsageList.size(); i++) {
             ScreenUsage screenUsage = screenUsageList.get(i);
-            if (screenUsage.getDate().equals(mDisplayedDate)) {
-                displayedPosition = i;
-                break;
+            try {
+                if (screenUsage.getDate().equals(mDisplayedDate) ||
+                        TimeUtil.sdf.parse(screenUsage.getDate()).before(TimeUtil.sdf.parse(mDisplayedDate))) {
+                    displayedPosition = i;
+                } else {
+                    break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
 

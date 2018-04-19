@@ -53,11 +53,25 @@ public class Constants {
         String PREFS_SHOW_NOTIFICATIONS = "ShowNotifications";
         String PREFS_RINGTONE = "Ringtone";
         String PREFS_VIBRATE = "Vibrate";
+        String HAS_ADDED_DEFAULT_REMINDER = "HasAddedDefautReminder";
     }
 
     public interface EXTRAS {
         String START_TIMER = "StartTimer";
         String STOP_TIMER = "StopTimer";
         String TYPE_OF_WEBVIEW = "TypeOfWebView";
+    }
+
+    public interface PREFERENCE_KEYS {
+        String ALLOW_TRACKING = "allow_tracking";
+        String SHOW_TUTORIAL = "show_tutorial";
+        String SHOW_NOTIFICATIONS = "show_notifications";
+        String NOTIFICATIONS_VIBRATE = "notifications_vibrate";
+        String NOTIFICATIONS_RINGTONE = "notifications_ringtone";
+        String NOTIFICATIONS_CUSTOMIZE_REMINDERS = "notifications_customize_reminders";
+        String ABOUT_FAQS = "about_faqs";
+        String ABOUT_TERMS_OF_SERVICE = "about_terms_of_service";
+        String ABOUT_PRIVACY_POLICY = "about_privacy_policy";
+        String MAX_THRESHOLD = "max_threshold";
     }
 }
