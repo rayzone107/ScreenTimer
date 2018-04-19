@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dp"
-            tools:listitem="@layout/max_time_list_item" />
+            tools:listitem="@layout/item_max_time_list" />
     </LinearLayout>
 
     <com.github.mikephil.charting.charts.PieChart

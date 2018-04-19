@@ -43,7 +43,7 @@ public class DurationSelectorSpinnerAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
         if (view == null) {
-            view = mLayoutInflater.inflate(R.layout.max_time_list_item, null);
+            view = mLayoutInflater.inflate(R.layout.item_max_time_list, null);
             viewHolder = new ViewHolder();
             viewHolder.time = view.findViewById(R.id.time_tv);
             view.setTag(viewHolder);

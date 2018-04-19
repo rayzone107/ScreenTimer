@@ -13,14 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
+import com.rachitgoyal.screentimer.libraries.wave.WaveView;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 import com.rachitgoyal.screentimer.modules.history.HistoryActivity;
 import com.rachitgoyal.screentimer.modules.reminder.ReminderActivity;
 import com.rachitgoyal.screentimer.modules.settings.SettingsActivity;
+import com.rachitgoyal.screentimer.modules.settings.SettingsFragment;
+import com.rachitgoyal.screentimer.service.ScreenTimerService;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
-import com.rachitgoyal.screentimer.libraries.wave.WaveView;
 
 import java.util.List;
 
@@ -28,6 +31,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TearsActivity extends BaseActivity implements TearsContract.View, TimeChangeBroadcastReceiver.TimeChangeListener {
+
+    private final int DEFAULT_TIME_OPTION = 7;
 
     private TearsContract.Presenter mPresenter;
     private TimeChangeBroadcastReceiver mTimeChangeReceiver;
@@ -61,9 +66,21 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
+        if (Prefs.getBoolean(Constants.PREFERENCES.PREFS_ALLOW_TRACKING, true)) {
+            Intent startIntent = new Intent(this, ScreenTimerService.class);
+            startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            startService(startIntent);
+        }
+
+        String selectedTime = Prefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, "");
+        if (selectedTime.isEmpty()) {
+            Prefs.putString(Constants.PREFERENCES.MAX_TIME_OPTION, Constants.timeOptions.get(DEFAULT_TIME_OPTION));
+        }
+
         mTimeChangeReceiver = new TimeChangeBroadcastReceiver(this);
-        mPresenter = new TearsPresenter(this, getSharedPreferences(Constants.PREFERENCES.PREFS_NAME, MODE_PRIVATE));
+        mPresenter = new TearsPresenter(this);
         mPresenter.setData(mContext);
+
         mWave.setCenterTitleSize(30);
     }
 
@@ -100,6 +117,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
         }
     }
 
+    @Override
     public void setData(float progress, int waveColor, String timeValue, float eyeOverlayOpacity) {
         mWave.setProgressValue(progress);
         mWave.setWaveColor(waveColor);
@@ -139,7 +157,10 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
                 startActivity(new Intent(mContext, HistoryActivity.class));
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(mContext, SettingsActivity.class));
+                Intent intent = new Intent(mContext, SettingsActivity.class);
+                intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT, SettingsFragment.class.getName());
+                intent.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

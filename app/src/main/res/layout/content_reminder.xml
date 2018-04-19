@@ -47,7 +47,7 @@
                         android:paddingLeft="32dp"
                         android:text="@string/add_reminder"
                         android:textAllCaps="true"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -89,7 +89,8 @@
                 <TimePicker
                     android:id="@+id/time_picker"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/add_button"
@@ -118,8 +119,8 @@
                     android:contentDescription="@string/recurring_reminder"
                     android:gravity="center_horizontal"
                     android:padding="8dp"
-                    android:tooltipText="@string/recurring_reminder"
-                    android:src="@drawable/recurring_disabled" />
+                    android:src="@drawable/recurring_disabled"
+                    android:tooltipText="@string/recurring_reminder" />
             </RelativeLayout>
 
         </com.rachitgoyal.screentimer.libraries.expansion_layout.ExpansionLayout>

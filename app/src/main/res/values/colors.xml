@@ -9,15 +9,12 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#0fff</color>
-    <color name="blue_100">#BBDEFB</color>
-    <color name="blue_200">#90CAF9</color>
     <color name="reminder_enabled">#ececec</color>
     <color name="reminder_disabled">#bababa</color>
     <color name="blue_600">#1E88E5</color>
-    <color name="disabled_text">#a9a9a9</color>
+    <color name="disabled_text">#cecece</color>
     <color name="light_gray">#32eeeeee</color>
     <color name="medium_gray">#c7c7c7</color>
     <color name="history_bg_start">#6b8ea7</color>
     <color name="history_bg">#294a62</color>
-    <color name="enabled_green">#44C553</color>
 </resources>

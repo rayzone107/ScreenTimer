@@ -38,7 +38,7 @@ import static com.rachitgoyal.screentimer.util.TimeOptions.TWO_HOURS;
 
 public class TimeUtil {
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private static final int MINUTES_IN_AN_HOUR = 60;
     private static final int SECONDS_IN_A_MINUTE = 60;
 
@@ -55,6 +55,12 @@ public class TimeUtil {
         seconds = totalSeconds
                 - ((hoursToSeconds(hours)) + (minutesToSeconds(minutes)));
 
+        timeString = hours == 0 ? minutes == 0 ? seconds == 1 ? String.valueOf(seconds).concat(" second") : String.valueOf(seconds).concat(" seconds") :
+                minutes == 1 ? String.valueOf(minutes).concat(" minute") : String.valueOf(minutes).concat(" minutes") :
+                hours == 1 && minutes == 0 ? String.valueOf(hours).concat(" hour") : minutes == 0 ? String.valueOf(hours).concat(" hours") :
+                        String.valueOf(hours).concat(":").concat(String.format(Locale.getDefault(), "%02d", minutes)).concat(" hours");
+
+        /* EXPLANATION FOR ABOVE CODE
         if (hours == 0) {
             if (minutes == 0) {
                 if (seconds == 1) {
@@ -75,7 +81,7 @@ public class TimeUtil {
             } else {
                 timeString = String.valueOf(hours).concat(":").concat(String.format(Locale.getDefault(), "%02d", minutes)).concat(" hours");
             }
-        }
+        }*/
 
         return timeString;
     }
@@ -93,6 +99,14 @@ public class TimeUtil {
         seconds = totalSeconds
                 - ((hoursToSeconds(hours)) + (minutesToSeconds(minutes)));
 
+        timeString = hours == 0 ? minutes == 0 ? seconds == 1 ? String.valueOf(seconds).concat(" second") : String.valueOf(seconds).concat(" seconds") :
+                minutes == 1 ? String.valueOf(minutes).concat(" minute") : String.valueOf(minutes).concat(" minutes") :
+                minutes == 0 ? String.valueOf(hours).concat(hours == 1 ? " hour" : " hours") :
+                        minutes == 1 ? String.valueOf(hours).concat(hours == 1 ? " hour and " : " hours and ")
+                                .concat(String.valueOf(minutes)).concat(" minute") : String.valueOf(hours).concat(hours == 1 ? " hour and " : " hours and ")
+                                .concat(String.valueOf(minutes)).concat(" minutes");
+
+        /* EXPLANATION OF ABOVE CODE
         if (hours == 0) {
             if (minutes == 0) {
                 if (seconds == 1) {
@@ -106,14 +120,16 @@ public class TimeUtil {
                 timeString = String.valueOf(minutes).concat(" minutes");
             }
         } else {
-            if (hours == 1 && minutes == 0) {
-                timeString = String.valueOf(hours).concat(" hour");
-            } else if (minutes == 0) {
-                timeString = String.valueOf(hours).concat(" hours");
+            if (minutes == 0) {
+                timeString = String.valueOf(hours).concat(hours == 1 ? " hour" : " hours");
+            } else if (minutes == 1) {
+                timeString = String.valueOf(hours).concat(hours == 1 ? " hour and " : " hours and ")
+                        .concat(String.valueOf(minutes)).concat(" minute");
             } else {
-                timeString = String.valueOf(hours).concat(" hours and ").concat(String.format(Locale.getDefault(), "%02d", minutes)).concat(" minutes");
+                timeString = String.valueOf(hours).concat(hours == 1 ? " hour and " : " hours and ")
+                        .concat(String.valueOf(minutes)).concat(" minutes");
             }
-        }
+        }*/
 
         return timeString;
     }
@@ -360,6 +376,11 @@ public class TimeUtil {
         int remainder = seconds - hours * 3600;
         int mins = remainder / 60;
 
+        time = hours == 0 ? mins == 1 ? "1 minute" : mins + " minutes" :
+                hours == 1 ? mins == 0 ? "1 hour" : hours + ":" + String.format(Locale.getDefault(), "%02d", mins) :
+                        mins == 0 ? hours + " hours" : hours + ":" + String.format(Locale.getDefault(), "%02d", mins);
+
+        /* EXPLANATION FOR ABOVE CODE
         if (hours == 0) {
             if (mins == 1) {
                 time = "1 minute";
@@ -378,7 +399,7 @@ public class TimeUtil {
             } else {
                 time = hours + ":" + String.format(Locale.getDefault(), "%02d", mins);
             }
-        }
+        }*/
 
         return time;
     }
@@ -416,7 +437,7 @@ public class TimeUtil {
         }
     }
 
-    public static String getDayOfMonthSuffix(final int n) {
+    private static String getDayOfMonthSuffix(final int n) {
         if (n >= 11 && n <= 13) {
             return "th";
         }

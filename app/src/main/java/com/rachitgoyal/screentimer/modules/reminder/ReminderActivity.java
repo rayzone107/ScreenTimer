@@ -101,27 +101,20 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
             public void onStartedExpand(ExpansionLayout expansionLayout, final boolean willExpand) {
                 mDeleteIV.setVisibility(willExpand ? View.GONE : View.VISIBLE);
                 YoYo.with(willExpand ? Techniques.FadeIn : Techniques.FadeOut).duration(800)
-                        .withListener(new Animator.AnimatorListener() {
+                        .onStart(new YoYo.AnimatorCallback() {
                             @Override
-                            public void onAnimationStart(Animator animator) {
+                            public void call(Animator animator) {
                                 if (willExpand) {
                                     mShadowView.setVisibility(View.VISIBLE);
                                 }
                             }
-
+                        })
+                        .onEnd(new YoYo.AnimatorCallback() {
                             @Override
-                            public void onAnimationEnd(Animator animator) {
+                            public void call(Animator animator) {
                                 if (!willExpand) {
                                     mShadowView.setVisibility(View.GONE);
                                 }
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animator) {
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animator) {
                             }
                         }).playOn(mShadowView);
             }
@@ -148,31 +141,14 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     @OnClick(R.id.recurring_iv)
     public void recurringClicked(View view) {
         mIsRecurringEnabled = !mIsRecurringEnabled;
-//        mRecurringIV.setColorFilter(ContextCompat.getColor(mContext, mIsRecurringEnabled ? R.color.enabled_green : R.color.medium_gray));
         YoYo.with(Techniques.RotateIn)
                 .duration(500)
-                .withListener(new Animator.AnimatorListener() {
+                .onEnd(new YoYo.AnimatorCallback() {
                     @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
+                    public void call(Animator animator) {
                         mRecurringIV.setImageResource(mIsRecurringEnabled ? R.drawable.recurring_enabled : R.drawable.recurring_disabled);
                     }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                })
-                .playOn(findViewById(R.id.recurring_iv));
+                }).playOn(findViewById(R.id.recurring_iv));
     }
 
     @Override
@@ -219,7 +195,9 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
                     }
                 }
                 mActionMode = startSupportActionMode(mActionModeCallback);
-                if (!isDeleteEnabled) {
+                if (mActionMode != null && !isDeleteEnabled) {
+                    mActionMode.setTitle("Select Reminders to Delete");
+                    mActionMode.setTitleOptionalHint(true);
                     mActionMode.getMenu().findItem(R.id.action_delete).setVisible(false);
                 }
             }

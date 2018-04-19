@@ -1,7 +1,6 @@
 package com.rachitgoyal.screentimer.modules.tears;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.Reminder;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
@@ -50,22 +50,19 @@ import static com.rachitgoyal.screentimer.util.TimeOptions.TWO_HOURS;
 
 public class TearsPresenter implements TearsContract.Presenter {
 
-    private static final long SECONDS_IN_A_DAY = 86400;
     private TearsContract.View mView;
-    private SharedPreferences mPrefs;
     private int mScaleMaxLimit;
     private long mMillisUsed;
     private int mTearCountdownThreshold = 0;
     private int mTearCountdown = 0;
     private int mCurrentAllowedTime = 0;
 
-    TearsPresenter(TearsContract.View view, SharedPreferences sharedPreferences) {
+    TearsPresenter(TearsContract.View view) {
         mView = view;
-        mPrefs = sharedPreferences;
     }
 
     private int getAllowedTime() {
-        return TimeUtil.convertTimeOptionToSeconds(mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
+        return TimeUtil.convertTimeOptionToSeconds(Prefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, ""));
     }
 
     @Override
@@ -137,18 +134,6 @@ public class TearsPresenter implements TearsContract.Presenter {
                     }
                 }
             };
-
-            /*final Runnable alphaRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    handler.postDelayed(this, 1);
-                    teardropIV.setImageAlpha(teardropIV.getImageAlpha() + 13 >= 255 ? 255 : teardropIV.getImageAlpha() + 13);
-                    if (teardropIV.getImageAlpha() >= 255) {
-                        handler.removeCallbacks(this);
-                        handler.post(positionRunnable);
-                    }
-                }
-            };*/
             handler.post(positionRunnable);
         }
         mTearCountdown++;

@@ -1,44 +1,91 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory
-        android:selectable="false"
-        android:title="General" />
+    <PreferenceCategory android:layout="@layout/divider_preference" />
 
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_usage_threshold_titles"
-        android:entryValues="@array/pref_usage_threshold_values"
-        android:key="usage_threshold"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="3 hours"
-        android:title="Change Maximum Usage Threshold" />
+    <PreferenceCategory android:title="@string/pref_header_general">
+        <SwitchPreference
+            android:id="@+id/general_allow_tracking"
+            android:defaultValue="true"
+            android:key="allow_tracking"
+            android:summary="@string/pref_description_allow_tracking"
+            android:title="@string/pref_allow_tracking"
+            tools:defaultValue="false" />
 
-    <PreferenceCategory
-        android:selectable="false"
-        android:title="Notifications" />
+        <ListPreference
+            android:id="@+id/general_max_threshold"
+            android:defaultValue="3 hours"
+            android:dependency="allow_tracking"
+            android:entries="@array/pref_max_threshold_entries"
+            android:entryValues="@array/pref_max_threshold_entries"
+            android:key="max_threshold"
+            android:summary="3 hours"
+            android:title="Select Max Usage Threshold" />
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="new_notifications"
-        android:title="Display Notifications" />
+        <SwitchPreference
+            android:id="@+id/general_show_tutorial"
+            android:defaultValue="false"
+            android:key="show_tutorial"
+            android:title="@string/pref_show_tutorial" />
+    </PreferenceCategory>
 
-    <!-- Allows the user to choose a ringtone in the 'notification' category. -->
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
-    <RingtonePreference
-        android:defaultValue="content://settings/system/notification_sound"
-        android:dependency="new_notifications"
-        android:key="notifications_new_message_ringtone"
-        android:ringtoneType="notification"
-        android:title="Notification Ringtone" />
+    <PreferenceCategory android:layout="@layout/divider_preference" />
 
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <SwitchPreference
-        android:defaultValue="true"
-        android:dependency="notifications_new_message"
-        android:key="notifications_new_message_vibrate"
-        android:title="@string/pref_title_vibrate" />
+    <PreferenceCategory android:title="@string/pref_header_notifications">
+        <SwitchPreference
+            android:id="@+id/notifications_show_notifications"
+            android:defaultValue="true"
+            android:key="show_notifications"
+            android:title="@string/pref_show_notifications"
+            tools:defaultValue="false" />
 
+        <Preference
+            android:id="@+id/notifications_customize_reminders"
+            android:key="notifications_customize_reminders"
+            android:title="@string/pref_customize_reminders" />
 
+        <RingtonePreference
+            android:id="@+id/notifications_ringtone"
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="show_notifications"
+            android:key="notifications_ringtone"
+            android:ringtoneType="notification"
+            android:title="@string/pref_title_ringtone" />
+
+        <SwitchPreference
+            android:id="@+id/notifications_vibrate"
+            android:defaultValue="true"
+            android:dependency="show_notifications"
+            android:key="notifications_vibrate"
+            android:title="@string/pref_title_vibrate" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/divider_preference" />
+
+    <PreferenceCategory android:title="@string/pref_header_about">
+        <Preference
+            android:id="@+id/about_copyright"
+            android:enabled="true"
+            android:key="about_copyright"
+            android:summary="@string/pref_copyright"
+            android:title="@string/pref_app_name"
+            tools:defaultValue="false" />
+
+        <Preference
+            android:id="@+id/about_faqs"
+            android:key="about_faqs"
+            android:title="@string/pref_faq" />
+
+        <Preference
+            android:id="@+id/about_terms_of_service"
+            android:key="about_terms_of_service"
+            android:title="@string/pref_terms_of_service" />
+
+        <Preference
+            android:id="@+id/about_privacy_policy"
+            android:key="about_privacy_policy"
+            android:title="@string/pref_privacy_policy" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/divider_preference" />
 </PreferenceScreen>

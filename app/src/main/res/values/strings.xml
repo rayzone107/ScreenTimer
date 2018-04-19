@@ -4,12 +4,24 @@
     <string name="action_reminders">Reminders</string>
     <string name="action_history">History</string>
 
-    <!-- Strings related to Settings -->
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_reminder">Reminders</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="every">Every</string>
+    <string name="action_delete">Delete</string>
+    <string name="reminders">Reminders</string>
+    <string name="delete_icon">Delete Icon</string>
+    <string name="history">History</string>
 
-    <!-- Example General settings -->
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recurring_reminder">Recurring Reminder</string>
+
+    <!--My Settings-->
     <string name="pref_header_general">General</string>
-
-    <string-array name="pref_usage_threshold_titles">
+    <string name="pref_allow_tracking">Track Device Usage</string>
+    <string name="pref_description_allow_tracking">If you disable this setting, your device usage will no longer be tracked</string>
+    <string-array name="pref_max_threshold_entries">
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>45 minutes</item>
@@ -29,99 +41,22 @@
         <item>21 hours</item>
         <item>24 hours</item>
     </string-array>
-    <string-array name="pref_usage_threshold_values">
-        <item>900</item>
-        <item>1800</item>
-        <item>2700</item>
-        <item>3600</item>
-        <item>5400</item>
-        <item>7200</item>
-        <item>9000</item>
-        <item>10800</item>
-        <item>14400</item>
-        <item>18000</item>
-        <item>21600</item>
-        <item>28800</item>
-        <item>36000</item>
-        <item>43200</item>
-        <item>54000</item>
-        <item>64800</item>
-        <item>75600</item>
-        <item>86400</item>
-    </string-array>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
+    <string name="pref_show_tutorial">Show Tutorial</string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
+    <string name="pref_show_notifications">Show Notifications</string>
+    <string name="pref_customize_reminders">Customize Reminders</string>
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_history">History</string>
-    <string name="title_activity_reminder">Reminders</string>
-    <string name="add_reminder">Add Reminder</string>
-    <string name="of_usage">of usage.</string>
-    <string name="add_icon">Add Icon</string>
-    <string name="every">Every</string>
-    <string name="action_delete">Delete</string>
-    <string name="reminders">Reminders</string>
-    <string name="delete_icon">Delete Icon</string>
-    <string name="history">History</string>
 
-    <string-array name="reminder_frequency_list">
-        <item>Every</item>
-        <item>At</item>
-    </string-array>
+    <string name="pref_header_about">About</string>
+    <string name="pref_app_name">Gaze Away v1.0</string>
+    <string name="pref_copyright">Copyright \u00A9 2018 RachitGoyal</string>
+    <string name="pref_faq">FAQ\'s</string>
+    <string name="pref_terms_of_service">Terms of Service</string>
+    <string name="pref_privacy_policy">Privacy Policy</string>
+    <!--My Settings-->
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="todays_screen_usage">Today\'s Screen Usage</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="recurring">Recurring</string>
-    <string name="recurring_reminder">Recurring Reminder</string>
 </resources>

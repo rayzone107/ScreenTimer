@@ -9,7 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,23 +17,25 @@ import android.os.IBinder;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.Reminder;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
-import com.rachitgoyal.screentimer.modules.home.HomeActivity;
 import com.rachitgoyal.screentimer.util.Constants;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
 import java.util.Date;
 import java.util.List;
 
-public class ScreenTimerService extends Service {
+public class ScreenTimerService extends Service implements StopServiceReceiver.StopServiceListener {
 
     private BroadcastReceiver mScreenStateReceiver;
+    private StopServiceReceiver mStopServiceReceiver;
     private Handler mHandler;
     private Runnable mRunnable;
     private Notification.Builder mNotificationBuilder;
     private NotificationManager mNotificationManager;
+    private String mNotificationTime = "";
 
     public ScreenTimerService() {
     }
@@ -42,15 +44,13 @@ public class ScreenTimerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (intent.getAction() != null && intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-                Intent notificationIntent = new Intent(this, HomeActivity.class);
-                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                        notificationIntent, 0);
+                PackageManager pm = getPackageManager();
+                Intent launchIntent = pm.getLaunchIntentForPackage("com.rachitgoyal.screentimer");
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
 
                 mNotificationBuilder = new Notification.Builder(this)
                         .setContentTitle("Today's Usage: ")
-                        .setContentIntent(pendingIntent)
+                        .setContentIntent(contentIntent)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
@@ -75,6 +75,10 @@ public class ScreenTimerService extends Service {
                 screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
                 screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
                 registerReceiver(mScreenStateReceiver, screenStateFilter);
+
+                mStopServiceReceiver = new StopServiceReceiver(this);
+                registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION.STOP_SERVICE));
+
                 restartTimer();
             } else if (intent.hasExtra(Constants.EXTRAS.START_TIMER)) {
                 restartTimer();
@@ -83,6 +87,11 @@ public class ScreenTimerService extends Service {
             }
         }
         return START_STICKY;
+    }
+
+    @Override
+    public void stopService() {
+        this.stopSelf();
     }
 
     private void restartTimer() {
@@ -111,8 +120,7 @@ public class ScreenTimerService extends Service {
 
     private void updateDatabase() {
 
-        SharedPreferences mPrefs = getSharedPreferences(Constants.PREFERENCES.PREFS_NAME, MODE_PRIVATE);
-        String selectedTime = mPrefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, "");
+        String selectedTime = Prefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, "");
 
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class)
                 .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).
@@ -146,37 +154,67 @@ public class ScreenTimerService extends Service {
     }
 
     private void sendReminder(ScreenUsage screenUsage) {
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Intent notificationIntent = new Intent(this, HomeActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
+        if (Prefs.getBoolean(Constants.PREFERENCES.PREFS_SHOW_NOTIFICATIONS, true)) {
+            Uri soundUri = Prefs.contains(Constants.PREFERENCES.PREFS_RINGTONE) ?
+                    Uri.parse(Prefs.getString(Constants.PREFERENCES.PREFS_RINGTONE, "")) :
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        String title, message;
+            PackageManager pm = getPackageManager();
+            Intent launchIntent = pm.getLaunchIntentForPackage("com.rachitgoyal.screentimer");
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
 
-        boolean exceededLimit = screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed();
+            String title, message;
+            boolean exceededLimit = screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed();
+            if (exceededLimit) {
+                title = "You've exceeded your daily limit";
+                message = "Looking at screens for too long is really harmful for your eyes. " +
+                        "You've already exceeded the maximum time limit. You really should stop now.";
+            } else {
+                title = "Protect your eyes";
+                message = "You've used your device over " +
+                        TimeUtil.convertSecondsToApproximateTimeString(screenUsage.getSecondsUsed()) +
+                        ". You should rest your eyes.";
+            }
 
-        if (exceededLimit) {
-            title = "You've exceeded your daily limit";
-            message = "Looking at screens for too long is really harmful for your eyes. " +
-                    "You've already exceeded the maximum time limit. You really should stop now.";
-        } else {
-            title = "Protect your eyes";
-            message = "You've used your device over " +
-                    TimeUtil.convertSecondsToApproximateTimeString(screenUsage.getSecondsUsed()) +
-                    ". You should rest your eyes.";
-        }
+            Notification.Builder notificationBuilder = new Notification.Builder(this)
+                    .setContentTitle(title)
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setContentIntent(contentIntent)
+                    .setSound(soundUri)
+                    .setAutoCancel(true)
+                    .setOngoing(false);
 
-        Notification.Builder notificationBuilder = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentIntent(pendingIntent)
-                .setSound(soundUri)
-                .setOngoing(false);
-        Notification notification = new Notification.BigTextStyle(notificationBuilder).bigText(message).build();
-        if (mNotificationManager != null) {
-            mNotificationManager.notify(Constants.NOTIFICATION_ID.REMINDER, notification);
+            if (!Prefs.getBoolean(Constants.PREFERENCES.PREFS_VIBRATE, true)) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID_REMINDER,
+                            Constants.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    if (mNotificationManager != null) {
+                        mNotificationManager.createNotificationChannel(channel);
+                    }
+                    channel.enableVibration(false);
+                    notificationBuilder.setChannelId(Constants.NOTIFICATION_CHANNEL_ID_REMINDER);
+                } else {
+                    notificationBuilder.setVibrate(null);
+                }
+            } else {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID_REMINDER,
+                            Constants.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    if (mNotificationManager != null) {
+                        mNotificationManager.createNotificationChannel(channel);
+                    }
+                    channel.enableVibration(true);
+                    channel.setVibrationPattern(new long[]{1000, 1000});
+                    notificationBuilder.setChannelId(Constants.NOTIFICATION_CHANNEL_ID_REMINDER);
+                } else {
+                    notificationBuilder.setVibrate(new long[]{1000, 1000});
+                }
+            }
+
+            Notification notification = new Notification.BigTextStyle(notificationBuilder).bigText(message).build();
+            if (mNotificationManager != null) {
+                mNotificationManager.notify(Constants.NOTIFICATION_ID.REMINDER, notification);
+            }
         }
     }
 
@@ -189,18 +227,21 @@ public class ScreenTimerService extends Service {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class)
                 .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).
                         limit("1").list();
-
         ScreenUsage screenUsage = screenUsageList.get(0);
-        mNotificationBuilder.setContentTitle("Today's Usage: " + TimeUtil.convertSecondsToNotificationTimeString(screenUsage.getSecondsUsed()));
-
-        if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
-            long timeExceeded = screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
-            String exceededTime = TimeUtil.convertSecondsToApproximateTimeString(timeExceeded);
-            String message = "You've exceeded usage by " + exceededTime + ".";
-            mNotificationBuilder.setContentText(message);
+        String notificationTime = TimeUtil.convertSecondsToNotificationTimeString(screenUsage.getSecondsUsed());
+        if (!notificationTime.equals(mNotificationTime)) {
+            mNotificationTime = notificationTime;
+            mNotificationBuilder.setContentTitle("Today's Usage: " + mNotificationTime);
+            if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
+                long timeExceeded = screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
+                String exceededTime = TimeUtil.convertSecondsToApproximateTimeString(timeExceeded);
+                String message = "You've exceeded usage by " + exceededTime + ".";
+                mNotificationBuilder.setContentText(message);
+            } else {
+                mNotificationBuilder.setContentText(null);
+            }
+            mNotificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotificationBuilder.build());
         }
-
-        mNotificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotificationBuilder.build());
     }
 
     @Override
@@ -211,6 +252,11 @@ public class ScreenTimerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mScreenStateReceiver);
+        if (mScreenStateReceiver != null) {
+            unregisterReceiver(mScreenStateReceiver);
+        }
+        if (mStopServiceReceiver != null) {
+            unregisterReceiver(mStopServiceReceiver);
+        }
     }
 }

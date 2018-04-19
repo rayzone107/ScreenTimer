@@ -171,10 +171,6 @@ public class DayHistoryPagerAdapter extends RecyclerView.Adapter<DayHistoryPager
             mPieChart.setData(data);
 
             mPieChart.setCenterText(generateCenterSpannableText(usedTime));
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            /*if (screenUsage.getDate().equals(sdf.format(new Date()))) {
-                setLegendIfToday(usedTime, allowedTime);
-            }*/
 
             mEmoticonTV.setImageResource(calculateForEmoticon(screenUsage));
             mDateTV.setText(TimeUtil.convertStringDateToFormattedString(screenUsage.getDate()));

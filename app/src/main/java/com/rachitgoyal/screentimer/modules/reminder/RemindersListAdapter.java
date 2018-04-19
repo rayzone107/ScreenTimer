@@ -59,7 +59,7 @@ public class RemindersListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(final int position) {
-        return R.layout.reminders_list_item_view;
+        return R.layout.item_reminder_list;
     }
 
 

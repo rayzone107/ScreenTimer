@@ -61,9 +61,6 @@ public class HomeActivity extends BaseActivity
         mPresenter.setupChart(mChart);
         mPresenter.setData();
 
-        Intent startIntent = new Intent(HomeActivity.this, ScreenTimerService.class);
-        startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-        startService(startIntent);
         mTimeChangeReceiver = new TimeChangeBroadcastReceiver(this);
         setSpinner();
 

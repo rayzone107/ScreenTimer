@@ -3,10 +3,11 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="com.orm.SugarApp"
+        android:name=".GazeAway"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +29,10 @@
 
         <activity
             android:name=".modules.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".modules.tears.TearsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -37,24 +42,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.tears.TearsActivity"
-            android:label=""
-            android:parentActivityName=".modules.home.HomeActivity"
+            android:name=".modules.reminder.ReminderActivity"
+            android:label="@string/title_activity_reminder"
+            android:parentActivityName=".modules.tears.TearsActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rachitgoyal.screentimer.modules.home.HomeActivity" />
-        </activity>
-
-        <service
-            android:name=".service.ScreenTimerService"
-            android:enabled="true">
-        </service>
-
-        <activity
-            android:name=".modules.settings.SettingsActivity"
-            android:label=""
-            android:parentActivityName=".modules.tears.TearsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
@@ -69,23 +60,35 @@
                 android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
         </activity>
         <activity
-            android:name=".modules.reminder.ReminderActivity"
-            android:label="@string/title_activity_reminder"
-            android:parentActivityName=".modules.tears.TearsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".modules.settings.SettingsActivity"
+            android:label=""
+            android:parentActivityName=".modules.tears.TearsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rachitgoyal.screentimer.modules.tears.TearsActivity" />
         </activity>
+        <activity
+            android:name=".modules.webview.WebViewActivity"
+            android:parentActivityName=".modules.settings.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rachitgoyal.screentimer.modules.settings.SettingsActivity" />
+        </activity>
+
+        <service
+            android:name=".service.ScreenTimerService"
+            android:enabled="true">
+        </service>
 
         <receiver
             android:name=".service.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
