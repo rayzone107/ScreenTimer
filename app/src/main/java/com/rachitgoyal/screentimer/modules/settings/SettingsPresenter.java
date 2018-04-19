@@ -68,6 +68,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                 String maxThreshold = (String) maxThresholdValue;
                 Prefs.putString(Constants.PREFERENCES.MAX_TIME_OPTION, maxThreshold);
                 preference.setSummary(maxThreshold);
+                mView.showNewMaxTimeSnackbar(maxThreshold);
                 setReminder(maxThreshold);
                 return true;
             }
