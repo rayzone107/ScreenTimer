@@ -1,6 +1,7 @@
 package com.rachitgoyal.screentimer.modules.reminder;
 
 import android.animation.Animator;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -79,6 +80,10 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
         ButterKnife.bind(this);
+
+        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle(R.string.reminders);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -103,7 +108,7 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
             public void onStartedExpand(ExpansionLayout expansionLayout, final boolean willExpand) {
                 if (!mReminderList.isEmpty()) {
                     mDeleteIV.setVisibility(willExpand ? View.GONE : View.VISIBLE);
-                } else {
+                } else if (mReminderList.isEmpty()) {
                     YoYo.with(willExpand ? Techniques.FadeOut : Techniques.FadeIn).duration(300).playOn(mNoReminderRL);
                 }
                 YoYo.with(willExpand ? Techniques.FadeIn : Techniques.FadeOut).duration(800)
@@ -162,7 +167,6 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
     public void updateReminders(List<Reminder> reminderList) {
         mReminderList.clear();
         mReminderList.addAll(reminderList);
-//        mNoReminderRL.setVisibility(mReminderList.isEmpty() ? View.VISIBLE : View.GONE);
         if (mReminderList.isEmpty() && mNoReminderRL.getVisibility() == View.GONE) {
             YoYo.with(Techniques.SlideInUp).duration(400).onStart(new YoYo.AnimatorCallback() {
                 @Override
@@ -258,6 +262,16 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     private class ActionModeCallback implements ActionMode.Callback {

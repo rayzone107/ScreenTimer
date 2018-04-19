@@ -2,10 +2,12 @@ package com.rachitgoyal.screentimer.modules.history;
 
 import android.content.Context;
 import android.content.res.Resources.Theme;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,7 +20,6 @@ import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 import com.rachitgoyal.screentimer.modules.history.day.DayHistoryFragment;
 import com.rachitgoyal.screentimer.modules.history.month.MonthHistoryFragment;
-import com.rachitgoyal.screentimer.modules.history.week.WeekHistoryFragment;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View {
 
@@ -28,6 +29,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         setContentView(R.layout.activity_history);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(getString(R.string.history));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -65,7 +68,16 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {

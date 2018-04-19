@@ -22,13 +22,19 @@
             app:theme="@style/ToolbarColoured">
 
             <ImageView
+                android:id="@+id/hamburger_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="20dp"
+                app:srcCompat="@drawable/ic_menu"/>
+
+            <ImageView
                 android:id="@+id/logo_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:gravity="start|center_vertical"
                 android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="10dp"
                 android:scaleType="fitStart"

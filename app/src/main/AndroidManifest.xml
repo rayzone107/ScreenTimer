@@ -19,7 +19,7 @@
             android:value="screen_timer.db" />
         <meta-data
             android:name="VERSION"
-            android:value="2" />
+            android:value="3" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -28,7 +28,7 @@
             android:value="com.rachitgoyal" />
 
         <activity
-            android:name=".modules.tears.TearsActivity"
+            android:name=".modules.onboarding.OnboardingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -37,6 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".modules.tears.TearsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".modules.reminder.ReminderActivity"
             android:label=""
@@ -84,6 +89,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
 
     </application>
 

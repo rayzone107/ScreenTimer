@@ -52,4 +52,38 @@
         android:orientation="vertical"
         android:paddingBottom="10dp" />
 
+    <RelativeLayout
+        android:id="@+id/welcome_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#d4000000"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/welcome_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:fontFamily="serif"
+            android:text="Welcome to Gaze Away"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_title_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="This app will keep track of your phone usage. It'll start tracking as soon as you unlock your screen, to the time you lock it again."
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Gaze Away</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_reminders">Reminders</string>
-    <string name="action_history">History</string>
 
     <string name="add_reminder">Add Reminder</string>
     <string name="every">Every</string>
@@ -12,7 +9,6 @@
     <string name="history">History</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recurring_reminder">Recurring Reminder</string>
 
     <!--My Settings-->
@@ -56,6 +52,12 @@
     <string name="pref_terms_of_service">Terms of Service</string>
     <string name="pref_privacy_policy">Privacy Policy</string>
     <string name="no_reminders">You\'ve not added any reminders yet. \nYou can add reminders using the above + icon.</string>
+    <string name="onboarding_card1_title">Welcome</string>
+    <string name="onboarding_card1_desc">Protect your eyes from harm by monitoring your device usage.</string>
+    <string name="onboarding_card2_title">Check Usage</string>
+    <string name="onboarding_card2_desc">Maintain history of daily device usage. Easily check lifetime history.</string>
+    <string name="onboarding_card3_title">Add Reminders</string>
+    <string name="onboarding_card3_desc">Get frequent reminders to ensure you\'re aware of your device usage</string>
     <!--My Settings-->
 
 </resources>

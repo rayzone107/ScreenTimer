@@ -65,7 +65,6 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
 
     @Override
     public void fetchData(int year, int month, int day) {
-
         String date = String.format(Locale.getDefault(), "%02d", day) + "/" + String.format(Locale.getDefault(), "%02d", (month + 1)) + "/" + year;
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField)
                 .where(Condition.prop(ScreenUsage.dateField).eq(date)).list();
@@ -149,11 +148,15 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
             maxTime = TimeUtil.calculateGrayedTimeFromTimeOption(allowedTime) - allowedTime;
 
             pieValues.add(new PieEntry(usedTime, TimeUtil.convertSecondsToApproximateTimeString(usedTime)));
-            pieValues.add(new PieEntry(leftTime, TimeUtil.convertSecondsToApproximateTimeString(leftTime)));
+            if (leftTime != 0) {
+                pieValues.add(new PieEntry(leftTime, TimeUtil.convertSecondsToApproximateTimeString(leftTime)));
+            }
             pieValues.add(new PieEntry(maxTime, ""));
 
             colors.add(Color.rgb(255, 151, 151));
-            colors.add(Color.GREEN);
+            if (leftTime != 0) {
+                colors.add(Color.GREEN);
+            }
             colors.add(Color.rgb(211, 211, 211));
         }
 

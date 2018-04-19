@@ -50,6 +50,8 @@ import static com.rachitgoyal.screentimer.util.TimeOptions.TWO_HOURS;
 
 public class TearsPresenter implements TearsContract.Presenter {
 
+    private final int DEFAULT_TIME_OPTION = 7;
+
     private TearsContract.View mView;
     private int mScaleMaxLimit;
     private long mMillisUsed;
@@ -67,10 +69,18 @@ public class TearsPresenter implements TearsContract.Presenter {
 
     @Override
     public void setData(Context context) {
+        setDefaultMaxThreshold();
         int allowedTime = getAllowedTime();
         setScale(context, allowedTime);
         addDefaultReminder(allowedTime);
         calculateData(context, allowedTime);
+    }
+
+    private void setDefaultMaxThreshold() {
+        String selectedTime = Prefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, "");
+        if (selectedTime.isEmpty()) {
+            Prefs.putString(Constants.PREFERENCES.MAX_TIME_OPTION, Constants.timeOptions.get(DEFAULT_TIME_OPTION));
+        }
     }
 
     private void addDefaultReminder(int allowedTime) {

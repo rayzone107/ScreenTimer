@@ -7,7 +7,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.rachitgoyal.screentimer.R;
@@ -74,15 +73,5 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCont
     @Override
     public void showNewMaxTimeSnackbar(String maxThreshold) {
         Toast.makeText(mContext, "A new reminder has been added for " + maxThreshold, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

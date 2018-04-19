@@ -5,17 +5,20 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orm.query.Select;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
+import com.rachitgoyal.screentimer.libraries.reside_menu.ResideMenu;
+import com.rachitgoyal.screentimer.libraries.reside_menu.ResideMenuItem;
 import com.rachitgoyal.screentimer.libraries.wave.WaveView;
+import com.rachitgoyal.screentimer.model.OnBoardingStatus;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 import com.rachitgoyal.screentimer.modules.history.HistoryActivity;
 import com.rachitgoyal.screentimer.modules.reminder.ReminderActivity;
@@ -24,18 +27,26 @@ import com.rachitgoyal.screentimer.modules.settings.SettingsFragment;
 import com.rachitgoyal.screentimer.service.ScreenTimerService;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
+import com.wooplr.spotlight.SpotlightView;
+import com.wooplr.spotlight.utils.SpotlightListener;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TearsActivity extends BaseActivity implements TearsContract.View, TimeChangeBroadcastReceiver.TimeChangeListener {
-
-    private final int DEFAULT_TIME_OPTION = 7;
+public class TearsActivity extends BaseActivity implements TearsContract.View,
+        TimeChangeBroadcastReceiver.TimeChangeListener, View.OnClickListener {
 
     private TearsContract.Presenter mPresenter;
     private TimeChangeBroadcastReceiver mTimeChangeReceiver;
+    private ResideMenuItem mItemReminders;
+    private ResideMenuItem mItemHistory;
+    private ResideMenuItem mItemSettings;
+    private ResideMenu mResideMenu;
+
+    @BindView(R.id.hamburger_iv)
+    ImageView mHamburgerIV;
 
     @BindView(R.id.logo_iv)
     ImageView mLogoIV;
@@ -65,16 +76,12 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
         ButterKnife.bind(this);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        setResideMenu();
 
         if (Prefs.getBoolean(Constants.PREFERENCES.PREFS_ALLOW_TRACKING, true)) {
             Intent startIntent = new Intent(this, ScreenTimerService.class);
             startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
             startService(startIntent);
-        }
-
-        String selectedTime = Prefs.getString(Constants.PREFERENCES.MAX_TIME_OPTION, "");
-        if (selectedTime.isEmpty()) {
-            Prefs.putString(Constants.PREFERENCES.MAX_TIME_OPTION, Constants.timeOptions.get(DEFAULT_TIME_OPTION));
         }
 
         mTimeChangeReceiver = new TimeChangeBroadcastReceiver(this);
@@ -84,10 +91,102 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
         mWave.setCenterTitleSize(30);
     }
 
+    private void setResideMenu() {
+        mResideMenu = new ResideMenu(this);
+        mResideMenu.attachToActivity(this);
+        mResideMenu.setBackground(R.drawable.tree_bg);
+        mResideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        mResideMenu.setShadowVisible(true);
+        mResideMenu.setScaleValue(0.6f);
+
+        mItemReminders = new ResideMenuItem(this, R.drawable.ic_reminder, "Reminders", 20);
+        mItemHistory = new ResideMenuItem(this, R.drawable.ic_history, "History", 20);
+        mItemSettings = new ResideMenuItem(this, R.drawable.ic_settings, "Settings", 20);
+
+        mItemReminders.setOnClickListener(this);
+        mResideMenu.addMenuItem(mItemReminders, ResideMenu.DIRECTION_LEFT);
+        mItemHistory.setOnClickListener(this);
+        mResideMenu.addMenuItem(mItemHistory, ResideMenu.DIRECTION_LEFT);
+        mItemSettings.setOnClickListener(this);
+        mResideMenu.addMenuItem(mItemSettings, ResideMenu.DIRECTION_LEFT);
+
+        mHamburgerIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mResideMenu != null && !mResideMenu.isOpened()) {
+                    mResideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mItemReminders) {
+            startActivity(new Intent(mContext, ReminderActivity.class));
+        } else if (view == mItemHistory) {
+            startActivity(new Intent(mContext, HistoryActivity.class));
+        } else if (view == mItemSettings) {
+            Intent intent = new Intent(mContext, SettingsActivity.class);
+            intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT, SettingsFragment.class.getName());
+            intent.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true);
+            startActivity(intent);
+        }
+
+    }
+
+    private void checkOnBoardingStatus() {
+        List<OnBoardingStatus> onBoardingStatusList = Select.from(OnBoardingStatus.class).list();
+        if (!onBoardingStatusList.isEmpty()) {
+            OnBoardingStatus onBoardingStatus = onBoardingStatusList.get(0);
+
+            if (!onBoardingStatus.isFirstScreenOnBoardingDone()) {
+                doOnboarding(onBoardingStatus);
+
+            }
+        } else {
+            OnBoardingStatus onBoardingStatus = new OnBoardingStatus();
+            onBoardingStatus.save();
+            doOnboarding(onBoardingStatus);
+        }
+    }
+
+    private void doOnboarding(final OnBoardingStatus onBoardingStatus) {
+        new SpotlightView.Builder(this)
+                .headingTvText("Welcome to Gaze Away")
+                .headingTvColor(Color.RED)
+                .headingTvSize(30)
+                .subHeadingTvText("This app will help you protect your eyes")
+                .subHeadingTvSize(20)
+                .enableRevealAnimation(true)
+                .dismissOnBackPress(true)
+                .dismissOnTouch(true)
+                .fadeinTextDuration(400)
+                .introAnimationDuration(400)
+                .lineAnimDuration(400)
+                .lineAndArcColor(Color.parseColor("#eb273f"))
+                .maskColor(Color.parseColor("#dc000000"))
+                .setListener(new SpotlightListener() {
+                    @Override
+                    public void onUserClicked(String s) {
+                        // TODO : Change this to true before launch
+//                        onBoardingStatus.setFirstScreenOnBoardingDone(false);
+//                        onBoardingStatus.save();
+                    }
+                })
+                .target(mEye)
+                .show();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(mTimeChangeReceiver, new IntentFilter(Constants.ACTION.UPDATE_TIMER));
+        checkOnBoardingStatus();
+
+        if (mResideMenu != null && mResideMenu.isOpened()) {
+            mResideMenu.closeMenu();
+        }
     }
 
     @Override
@@ -143,32 +242,12 @@ public class TearsActivity extends BaseActivity implements TearsContract.View, T
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tears, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_reminders:
-                startActivity(new Intent(mContext, ReminderActivity.class));
-                break;
-            case R.id.action_history:
-                startActivity(new Intent(mContext, HistoryActivity.class));
-                break;
-            case R.id.action_settings:
-                Intent intent = new Intent(mContext, SettingsActivity.class);
-                intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT, SettingsFragment.class.getName());
-                intent.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true);
-                startActivity(intent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void setData() {
         mPresenter.setData(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return mResideMenu.dispatchTouchEvent(ev);
     }
 }
