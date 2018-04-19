@@ -7,10 +7,10 @@ import android.support.v4.content.ContextCompat;
 
 import com.codemybrainsout.onboarder.AhoyOnboarderActivity;
 import com.codemybrainsout.onboarder.AhoyOnboarderCard;
-import com.orm.query.Select;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
-import com.rachitgoyal.screentimer.model.OnBoardingStatus;
 import com.rachitgoyal.screentimer.modules.tears.TearsActivity;
+import com.rachitgoyal.screentimer.util.Constants;
 import com.rachitgoyal.screentimer.util.ModelUtil;
 
 import java.util.ArrayList;
@@ -23,15 +23,13 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mContext = getBaseContext();
 
-        List<OnBoardingStatus> onBoardingStatusList = Select.from(OnBoardingStatus.class).list();
-        if (!onBoardingStatusList.isEmpty() && onBoardingStatusList.get(0).isFirstScreenOnBoardingDone()) {
+        if (Prefs.getBoolean(Constants.PREFERENCES.PREFS_SHOW_TUTORIAL, true)) {
+            setupCards();
+        } else {
             onFinishButtonPressed();
             finish();
-        } else {
-            setupCards();
         }
     }
 
@@ -70,6 +68,7 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
 
     @Override
     public void onFinishButtonPressed() {
+        Prefs.putBoolean(Constants.PREFERENCES.PREFS_SHOW_TUTORIAL, false);
         startActivity(new Intent(this, TearsActivity.class));
     }
 }

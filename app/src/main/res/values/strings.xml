@@ -36,7 +36,7 @@
         <item>24 hours</item>
     </string-array>
 
-    <string name="pref_show_tutorial">Show Tutorial</string>
+    <string name="pref_show_tutorial">Show Onboarding</string>
 
     <string name="pref_header_notifications">Notifications</string>
     <string name="pref_show_notifications">Show Notifications</string>

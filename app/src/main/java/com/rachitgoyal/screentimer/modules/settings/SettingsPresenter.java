@@ -93,6 +93,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     @Override
     public void handleSwitch(final Activity activity, final SwitchPreference switchPreference, final String pref) {
         if (switchPreference != null) {
+            if (pref.equals(Constants.PREFERENCES.PREFS_SHOW_TUTORIAL) && !Prefs.getBoolean(pref, false)) {
+                switchPreference.setChecked(false);
+            }
             switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object isTrueObject) {

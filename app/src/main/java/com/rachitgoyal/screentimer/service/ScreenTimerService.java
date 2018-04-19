@@ -35,7 +35,6 @@ public class ScreenTimerService extends Service implements StopServiceReceiver.S
     private Runnable mRunnable;
     private Notification.Builder mNotificationBuilder;
     private NotificationManager mNotificationManager;
-    private String mNotificationTime = "";
 
     public ScreenTimerService() {
     }
@@ -228,20 +227,16 @@ public class ScreenTimerService extends Service implements StopServiceReceiver.S
                 .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).
                         limit("1").list();
         ScreenUsage screenUsage = screenUsageList.get(0);
-        String notificationTime = TimeUtil.convertSecondsToNotificationTimeString(screenUsage.getSecondsUsed());
-        if (!notificationTime.equals(mNotificationTime)) {
-            mNotificationTime = notificationTime;
-            mNotificationBuilder.setContentTitle("Today's Usage: " + mNotificationTime);
-            if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
-                long timeExceeded = screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
-                String exceededTime = TimeUtil.convertSecondsToApproximateTimeString(timeExceeded);
-                String message = "You've exceeded usage by " + exceededTime + ".";
-                mNotificationBuilder.setContentText(message);
-            } else {
-                mNotificationBuilder.setContentText(null);
-            }
-            mNotificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotificationBuilder.build());
+        mNotificationBuilder.setContentTitle("Today's Usage: " + TimeUtil.convertSecondsToNotificationTimeString(screenUsage.getSecondsUsed()));
+        if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
+            long timeExceeded = screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
+            String exceededTime = TimeUtil.convertSecondsToApproximateTimeString(timeExceeded);
+            String message = "You've exceeded usage by " + exceededTime + ".";
+            mNotificationBuilder.setContentText(message);
+        } else {
+            mNotificationBuilder.setContentText(null);
         }
+        mNotificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotificationBuilder.build());
     }
 
     @Override

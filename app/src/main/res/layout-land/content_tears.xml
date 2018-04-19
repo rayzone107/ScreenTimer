@@ -14,15 +14,13 @@
     <ImageView
         android:id="@+id/eye_iv"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="100dp"
         android:src="@drawable/eye" />
 
     <ImageView
         android:id="@+id/eye_overlay_iv"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="100dp"
         android:alpha="0.6"
         android:src="@drawable/eye_overlay" />
 
@@ -31,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/eye_iv"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="5dp"
         app:wlv_borderWidth="0dp"
         app:wlv_progressValue="50"
         app:wlv_round_rectangle="false"

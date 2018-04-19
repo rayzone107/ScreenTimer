@@ -12,13 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.orm.query.Select;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.libraries.reside_menu.ResideMenu;
 import com.rachitgoyal.screentimer.libraries.reside_menu.ResideMenuItem;
 import com.rachitgoyal.screentimer.libraries.wave.WaveView;
-import com.rachitgoyal.screentimer.model.OnBoardingStatus;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 import com.rachitgoyal.screentimer.modules.history.HistoryActivity;
 import com.rachitgoyal.screentimer.modules.reminder.ReminderActivity;
@@ -27,8 +25,6 @@ import com.rachitgoyal.screentimer.modules.settings.SettingsFragment;
 import com.rachitgoyal.screentimer.service.ScreenTimerService;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
-import com.wooplr.spotlight.SpotlightView;
-import com.wooplr.spotlight.utils.SpotlightListener;
 
 import java.util.List;
 
@@ -132,57 +128,12 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
             intent.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true);
             startActivity(intent);
         }
-
-    }
-
-    private void checkOnBoardingStatus() {
-        List<OnBoardingStatus> onBoardingStatusList = Select.from(OnBoardingStatus.class).list();
-        if (!onBoardingStatusList.isEmpty()) {
-            OnBoardingStatus onBoardingStatus = onBoardingStatusList.get(0);
-
-            if (!onBoardingStatus.isFirstScreenOnBoardingDone()) {
-                doOnboarding(onBoardingStatus);
-
-            }
-        } else {
-            OnBoardingStatus onBoardingStatus = new OnBoardingStatus();
-            onBoardingStatus.save();
-            doOnboarding(onBoardingStatus);
-        }
-    }
-
-    private void doOnboarding(final OnBoardingStatus onBoardingStatus) {
-        new SpotlightView.Builder(this)
-                .headingTvText("Welcome to Gaze Away")
-                .headingTvColor(Color.RED)
-                .headingTvSize(30)
-                .subHeadingTvText("This app will help you protect your eyes")
-                .subHeadingTvSize(20)
-                .enableRevealAnimation(true)
-                .dismissOnBackPress(true)
-                .dismissOnTouch(true)
-                .fadeinTextDuration(400)
-                .introAnimationDuration(400)
-                .lineAnimDuration(400)
-                .lineAndArcColor(Color.parseColor("#eb273f"))
-                .maskColor(Color.parseColor("#dc000000"))
-                .setListener(new SpotlightListener() {
-                    @Override
-                    public void onUserClicked(String s) {
-                        // TODO : Change this to true before launch
-//                        onBoardingStatus.setFirstScreenOnBoardingDone(false);
-//                        onBoardingStatus.save();
-                    }
-                })
-                .target(mEye)
-                .show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(mTimeChangeReceiver, new IntentFilter(Constants.ACTION.UPDATE_TIMER));
-        checkOnBoardingStatus();
 
         if (mResideMenu != null && mResideMenu.isOpened()) {
             mResideMenu.closeMenu();
