@@ -33,7 +33,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         toolbar.setTitle(getString(R.string.history));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Setup spinner
         Spinner spinner = findViewById(R.id.spinner);

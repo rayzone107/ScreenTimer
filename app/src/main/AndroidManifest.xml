@@ -30,7 +30,6 @@
         <activity
             android:name=".modules.onboarding.OnboardingActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,16 +39,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".modules.tears.TearsActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".modules.reminder.ReminderActivity"
             android:label=""
-            android:launchMode="singleTask"
             android:parentActivityName=".modules.tears.TearsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -59,7 +55,6 @@
         <activity
             android:name=".modules.history.HistoryActivity"
             android:label=""
-            android:launchMode="singleTask"
             android:parentActivityName=".modules.tears.TearsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -69,7 +64,6 @@
         <activity
             android:name=".modules.settings.SettingsActivity"
             android:label=""
-            android:launchMode="singleTask"
             android:parentActivityName=".modules.tears.TearsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -77,7 +71,6 @@
         </activity>
         <activity
             android:name=".modules.webview.WebViewActivity"
-            android:launchMode="singleTask"
             android:parentActivityName=".modules.settings.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -86,8 +79,7 @@
 
         <service
             android:name=".service.ScreenTimerService"
-            android:enabled="true">
-        </service>
+            android:enabled="true"/>
 
         <receiver
             android:name=".service.BootReceiver"

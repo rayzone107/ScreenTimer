@@ -24,16 +24,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/ToolbarDark">
 
-            <TextView
-                android:id="@+id/title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/history"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"

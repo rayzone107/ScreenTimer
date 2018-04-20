@@ -28,6 +28,7 @@ import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
 import com.rachitgoyal.screentimer.util.Constants;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -137,6 +138,15 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
             case RIGHT_SLIDE:
                 animateValues(data, screenUsage, Techniques.SlideInRight, Techniques.SlideOutLeft);
                 break;
+        }
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            Date date = TimeUtil.sdf.parse(screenUsage.getDate());
+            calendar.setTime(date);
+            mDatePickerDialog.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

@@ -68,6 +68,11 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!isTaskRoot()) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_tears);
         ButterKnife.bind(this);
         mToolbar.setTitle("");

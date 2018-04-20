@@ -86,6 +86,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         }
         if (!alreadyExists) {
             Reminder reminder = new Reminder(reminderTime, false);
+            reminder.setAllowedTimeReminder(true);
             reminder.save();
         }
     }

@@ -52,18 +52,4 @@
     </declare-styleable>
 
     <attr name="expansion_openOnlyOne" format="boolean"/>
-
-    <declare-styleable name="ExpansionsViewGroupFrameLayout">
-        <attr name="expansion_openOnlyOne"/>
-    </declare-styleable>
-    <declare-styleable name="ExpansionsViewGroupLinearLayout">
-        <attr name="expansion_openOnlyOne"/>
-    </declare-styleable>
-    <declare-styleable name="ExpansionsViewGroupRelativeLayout">
-        <attr name="expansion_openOnlyOne"/>
-    </declare-styleable>
-    <declare-styleable name="ExpansionsViewGroupConstraintLayout">
-        <attr name="expansion_openOnlyOne"/>
-    </declare-styleable>
-
 </resources>
