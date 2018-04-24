@@ -84,7 +84,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
 
         mTimeChangeReceiver = new TimeChangeBroadcastReceiver(this);
         mPresenter = new TearsPresenter(this);
-        mPresenter.createFakeDataHistorical();
+//        mPresenter.createFakeDataHistorical();
         mPresenter.setData(mContext);
 
         mWave.setCenterTitleSize(30);

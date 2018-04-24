@@ -19,6 +19,7 @@ import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.Reminder;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
 import com.rachitgoyal.screentimer.util.Constants;
+import com.rachitgoyal.screentimer.util.ModelUtil;
 import com.rachitgoyal.screentimer.util.TimeOptions;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
@@ -131,8 +132,8 @@ public class TearsPresenter implements TearsContract.Presenter {
             final ImageView teardropIV = new ImageView(context);
             teardropIV.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             teardropIV.setImageResource(R.drawable.tears);
-            teardropIV.getLayoutParams().height = 40;
-            teardropIV.getLayoutParams().width = 30;
+            teardropIV.getLayoutParams().height = ModelUtil.dp2px(context, 23);
+            teardropIV.getLayoutParams().width = ModelUtil.dp2px(context, 17);
             Random random = new Random();
             float tearDropX = (eyeX + eyeWidth / 2) + (random.nextInt(61) - 30);
             float tearDropY = (eyeY + eyeHeight / 2) + (random.nextInt(21) - 10);
