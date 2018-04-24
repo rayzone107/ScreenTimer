@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
     private ResideMenuItem mItemHistory;
     private ResideMenuItem mItemSettings;
     private ResideMenu mResideMenu;
+    private int topAreaHeight = 0;
 
     @BindView(R.id.hamburger_iv)
     ImageView mHamburgerIV;
@@ -68,11 +70,6 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!isTaskRoot()) {
-            finish();
-            return;
-        }
-
         setContentView(R.layout.activity_tears);
         ButterKnife.bind(this);
         mToolbar.setTitle("");
@@ -87,6 +84,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
 
         mTimeChangeReceiver = new TimeChangeBroadcastReceiver(this);
         mPresenter = new TearsPresenter(this);
+        mPresenter.createFakeDataHistorical();
         mPresenter.setData(mContext);
 
         mWave.setCenterTitleSize(30);
@@ -138,6 +136,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter.setData(mContext);
         registerReceiver(mTimeChangeReceiver, new IntentFilter(Constants.ACTION.UPDATE_TIMER));
 
         if (mResideMenu != null && mResideMenu.isOpened()) {
@@ -183,9 +182,16 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
         }
         mEyeOverlay.setAlpha(eyeOverlayOpacity);
         if (mWave.getMeasuredHeight() > 0) {
+            if (topAreaHeight == 0) {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                topAreaHeight = height - mParentRL.getMeasuredHeight();
+            }
+
             mPresenter.showAllowedTimeBar(mContext, mWave.getMeasuredHeight(), mParentRL.getMeasuredHeight());
             mPresenter.animateTearDrops(mContext, mEye.getX(), mEye.getY(), mEye.getMeasuredHeight(), mEye.getMeasuredWidth(), mWave.getHeight(),
-                    mParentRL.getHeight());
+                    mParentRL.getHeight(), topAreaHeight);
         }
     }
 
@@ -199,7 +205,7 @@ public class TearsActivity extends BaseActivity implements TearsContract.View,
 
     @Override
     public void setData() {
-        mPresenter.setData(this);
+        mPresenter.reloadData(this);
     }
 
     @Override

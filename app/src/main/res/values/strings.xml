@@ -58,6 +58,18 @@
     <string name="onboarding_card2_desc">Maintain history of daily device usage. Easily check lifetime history.</string>
     <string name="onboarding_card3_title">Add Reminders</string>
     <string name="onboarding_card3_desc">Get frequent reminders to ensure you\'re aware of your device usage</string>
+    <string name="statistics">Statistics</string>
+    <string name="average_overall_usage">Average Overall Usage</string>
+    <string name="minimum_usage">Best Day</string>
+    <string name="maximum_usage">Worst Day</string>
+    <string name="total_red_days">Total RED DAYS</string>
+    <string name="total_green_days">Total GREEN days</string>
+    <string name="total_recorded_days">Total recorded days</string>
+    <string name="time_spent_on_phone">&#37; Time Spent on Phone</string>
+    <string name="total_usage">Total Usage</string>
+    <string name="mins">MINS</string>
+    <string name="hours">HOURS</string>
+    <string name="days">DAYS</string>
     <!--My Settings-->
 
 </resources>

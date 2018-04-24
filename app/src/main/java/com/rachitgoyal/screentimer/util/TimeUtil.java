@@ -5,11 +5,15 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.SuperscriptSpan;
 
+import com.rachitgoyal.screentimer.model.ScreenUsage;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -450,6 +454,19 @@ public class TimeUtil {
                 return "rd";
             default:
                 return "th";
+        }
+    }
+
+    public static class StringDateComparator implements Comparator<ScreenUsage> {
+
+        @Override
+        public int compare(ScreenUsage screenUsage1, ScreenUsage screenUsage2) {
+            try {
+                return TimeUtil.sdf.parse(screenUsage1.getDate()).compareTo(TimeUtil.sdf.parse(screenUsage2.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return 0;
         }
     }
 }

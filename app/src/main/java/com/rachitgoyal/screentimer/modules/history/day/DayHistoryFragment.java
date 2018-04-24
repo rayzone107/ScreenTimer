@@ -20,6 +20,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.github.florent37.arclayout.ArcLayout;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
@@ -31,6 +32,7 @@ import com.rachitgoyal.screentimer.util.TimeUtil;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -200,7 +202,8 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         mEmoticonIV.setImageResource(mPresenter.calculateForEmoticon(screenUsage));
     }
 
-    private void setLegendIfToday(long usedTime, int allowedTime) {
+    @Override
+    public void setLegend(List<LegendEntry> legendEntries) {
         Legend legend = mPieChart.getLegend();
         legend.setEnabled(true);
         legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
@@ -208,10 +211,10 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         legend.setTextSize(12);
-        legend.setTextColor(Color.WHITE);
+        legend.setTextColor(Color.BLACK);
         legend.setYEntrySpace(10);
 
-        mPieChart.getLegend().setCustom(mPresenter.getLegendEntries(usedTime, allowedTime));
+        mPieChart.getLegend().setCustom(legendEntries);
     }
 
 

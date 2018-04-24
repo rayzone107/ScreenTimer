@@ -1,0 +1,480 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#dadada"
+            android:scrollbars="none"
+            tools:context="com.rachitgoyal.screentimer.modules.history.month.MonthHistoryFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/stats_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:elevation="8dp"
+            android:visibility="invisible"
+            app:cardBackgroundColor="#58b1ff"
+            app:cardCornerRadius="8dp"
+            tools:visibility="visible">
+
+            <io.supercharge.shimmerlayout.ShimmerLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shimmer_angle="45"
+                app:shimmer_animation_duration="2000"
+                app:shimmer_auto_start="true"
+                app:shimmer_color="@color/shimmer_color">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/stats_header_bg"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/statistics"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+            </io.supercharge.shimmerlayout.ShimmerLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/average_usage_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stats_cv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:elevation="8dp"
+            android:visibility="invisible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="8dp"
+            tools:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/header_average_usage_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/average_overall_usage"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                    android:id="@+id/average_usage_pb"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/header_average_usage_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    app:cpb_background_progressbar_color="#bdd4fa"
+                    app:cpb_background_progressbar_width="5dp"
+                    app:cpb_progressbar_color="@color/blue_600"
+                    app:cpb_progressbar_width="10dp"
+                    tools:cpb_progress="18" />
+
+                <TextView
+                    android:id="@+id/average_usage_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/average_usage_pb"
+                    android:layout_alignLeft="@id/average_usage_pb"
+                    android:layout_alignRight="@id/average_usage_pb"
+                    android:layout_alignTop="@id/average_usage_pb"
+                    android:gravity="center"
+                    android:textColor="@color/blue_600"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    tools:text="4:24:52 \nhours" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/min_max_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/average_usage_cv"
+            android:layout_marginTop="10dp"
+            android:weightSum="2">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/max_usage_cv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:elevation="8dp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="8dp"
+                tools:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/header_max_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="@string/maximum_usage"
+                        android:textColor="@color/black" />
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/max_usage_pb"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@id/header_max_usage_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        app:cpb_background_progressbar_color="#FFCDD2"
+                        app:cpb_background_progressbar_width="5dp"
+                        app:cpb_progressbar_color="#F44336"
+                        app:cpb_progressbar_width="10dp"
+                        tools:cpb_progress="39" />
+
+                    <TextView
+                        android:id="@+id/max_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/max_usage_pb"
+                        android:layout_alignLeft="@id/max_usage_pb"
+                        android:layout_alignRight="@id/max_usage_pb"
+                        android:layout_alignTop="@id/max_usage_pb"
+                        android:gravity="center"
+                        android:textColor="#F44336"
+                        android:textSize="14sp"
+                        android:textStyle="bold|italic"
+                        tools:text="9:25:11 \nhours" />
+
+                    <TextView
+                        android:id="@+id/date_max_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/max_usage_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        tools:text="18th Apr, 2018" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/min_usage_cv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:elevation="8dp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="8dp"
+                tools:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/header_min_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="@string/minimum_usage"
+                        android:textColor="@color/black" />
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/min_usage_pb"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@id/header_min_usage_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        app:cpb_background_progressbar_color="#b9dcac"
+                        app:cpb_background_progressbar_width="5dp"
+                        app:cpb_progressbar_color="#38c400"
+                        app:cpb_progressbar_width="10dp"
+                        tools:cpb_progress="4" />
+
+                    <TextView
+                        android:id="@+id/min_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/min_usage_pb"
+                        android:layout_alignLeft="@id/min_usage_pb"
+                        android:layout_alignRight="@id/min_usage_pb"
+                        android:layout_alignTop="@id/min_usage_pb"
+                        android:gravity="center"
+                        android:textColor="#38c400"
+                        android:textSize="14sp"
+                        android:textStyle="bold|italic"
+                        tools:text="1:03:19 \nhours" />
+
+                    <TextView
+                        android:id="@+id/date_min_usage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/min_usage_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        tools:text="14th Apr, 2018" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/other_stats_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/min_max_ll"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:elevation="8dp"
+            android:visibility="invisible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="8dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/total_usage_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="@string/total_usage"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/days_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/days_title_tv"
+                            android:layout_alignRight="@id/days_title_tv"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            tools:text="3" />
+
+                        <TextView
+                            android:id="@+id/days_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/days_tv"
+                            android:layout_marginRight="4dp"
+                            android:text="@string/days"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="8sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/hours_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/hours_title_tv"
+                            android:layout_alignRight="@id/hours_title_tv"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            tools:text="12" />
+
+                        <TextView
+                            android:id="@+id/hours_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/hours_tv"
+                            android:layout_marginRight="4dp"
+                            android:layout_toRightOf="@id/days_title_tv"
+                            android:text="@string/hours"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="8sp" />
+
+                        <TextView
+                            android:id="@+id/mins_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/mins_title_tv"
+                            android:layout_alignRight="@id/mins_title_tv"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            tools:text="37" />
+
+                        <TextView
+                            android:id="@+id/mins_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/mins_tv"
+                            android:layout_toRightOf="@id/hours_title_tv"
+                            android:text="@string/mins"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="8sp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/percent_time_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/time_spent_on_phone"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/average_percentage_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="18.3%" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/red_days_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/total_red_days"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/red_day_count_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="16" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/green_days_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/total_green_days"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/green_day_count_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="21" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/total_days_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/total_recorded_days"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/total_days_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="37" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</ScrollView>

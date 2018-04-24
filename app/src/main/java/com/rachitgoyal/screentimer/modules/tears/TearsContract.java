@@ -28,8 +28,10 @@ public interface TearsContract {
 
         void reloadData(Context context);
 
-        void animateTearDrops(Context context, float eyeX, float eyeY, int eyeHeight, int eyeWidth, int waveHeight, int parentHeight);
+        void animateTearDrops(Context context, float eyeX, float eyeY, int eyeHeight, int eyeWidth, int waveHeight, int parentHeight, int topAreaHeight);
 
         void showAllowedTimeBar(Context context, int waveHeight, int parentHeight);
+
+        void createFakeDataHistorical();
     }
 }

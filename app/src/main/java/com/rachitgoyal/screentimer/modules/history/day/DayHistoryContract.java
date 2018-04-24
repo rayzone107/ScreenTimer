@@ -21,6 +21,8 @@ public class DayHistoryContract {
         void setLeftArrowVisibility(boolean isEnabled);
 
         void setRightArrowVisibility(boolean isEnabled);
+
+        void setLegend(List<LegendEntry> legendEntries);
     }
 
     public interface Presenter {
@@ -33,8 +35,6 @@ public class DayHistoryContract {
         SpannableString generateCenterSpannableText(Context context, long usedTime);
 
         int calculateForEmoticon(ScreenUsage screenUsage);
-
-        List<LegendEntry> getLegendEntries(long usedTime, int allowedTime);
 
         long getMinDateForDatePicker();
 

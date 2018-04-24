@@ -93,7 +93,7 @@ public class ExpansionHeader extends FrameLayout {
         this.headerIndicator = headerIndicator;
 
         //if not, the view will clip when rotate
-        if (headerIndicator != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (headerIndicator != null) {
             headerIndicator.setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
 

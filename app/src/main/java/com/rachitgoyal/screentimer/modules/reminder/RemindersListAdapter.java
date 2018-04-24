@@ -21,6 +21,7 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.Reminder;
+import com.rachitgoyal.screentimer.util.ModelUtil;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
 import java.util.List;
@@ -120,7 +121,7 @@ public class RemindersListAdapter extends RecyclerView.Adapter {
             }
             if ((mCheckBox.getVisibility() == View.GONE && isDeleteModeEnabled) ||
                     (mCheckBox.getVisibility() == View.VISIBLE && !isDeleteModeEnabled)) {
-                animateDeleteMode(isDeleteModeEnabled);
+                animateDeleteMode(mParentLayout.getContext(), isDeleteModeEnabled);
             }
 
             mParentLayout.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +146,10 @@ public class RemindersListAdapter extends RecyclerView.Adapter {
             isInBind = false;
         }
 
-        private void animateDeleteMode(final boolean isEnabled) {
-            int startPosition = isEnabled ? 0 : 100;
-            int endPosition = isEnabled ? 100 : 0;
+        private void animateDeleteMode(Context context, final boolean isEnabled) {
+            int dp = ModelUtil.dp2px(context, 40);
+            int startPosition = isEnabled ? 0 : dp;
+            int endPosition = isEnabled ? dp : 0;
             int animationTime = 600;
             Skill skill = Skill.Linear;
             AnimatorSet set = new AnimatorSet();

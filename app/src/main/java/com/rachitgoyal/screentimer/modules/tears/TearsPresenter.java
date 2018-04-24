@@ -1,9 +1,12 @@
 package com.rachitgoyal.screentimer.modules.tears;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
+import android.graphics.PorterDuff;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
@@ -20,6 +23,7 @@ import com.rachitgoyal.screentimer.util.TimeOptions;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -58,6 +62,7 @@ public class TearsPresenter implements TearsContract.Presenter {
     private int mTearCountdownThreshold = 0;
     private int mTearCountdown = 0;
     private int mCurrentAllowedTime = 0;
+    private int mScaleMaxTime = 0;
 
     TearsPresenter(TearsContract.View view) {
         mView = view;
@@ -102,7 +107,7 @@ public class TearsPresenter implements TearsContract.Presenter {
     }
 
     @Override
-    public void animateTearDrops(Context context, float eyeX, float eyeY, int eyeHeight, int eyeWidth, int waveHeight, int parentHeight) {
+    public void animateTearDrops(Context context, float eyeX, float eyeY, int eyeHeight, int eyeWidth, int waveHeight, int parentHeight, int topAreaHeight) {
         if (mTearCountdown == mTearCountdownThreshold) {
             mTearCountdown = 0;
 
@@ -129,25 +134,41 @@ public class TearsPresenter implements TearsContract.Presenter {
             teardropIV.getLayoutParams().height = 40;
             teardropIV.getLayoutParams().width = 30;
             Random random = new Random();
-            teardropIV.setX((eyeX + eyeWidth / 2) + (random.nextInt(61) - 30));
-            teardropIV.setY((eyeY + eyeHeight / 2) + (random.nextInt(21) - 10));
+            float tearDropX = (eyeX + eyeWidth / 2) + (random.nextInt(61) - 30);
+            float tearDropY = (eyeY + eyeHeight / 2) + (random.nextInt(21) - 10);
+            teardropIV.setX(tearDropX);
+            teardropIV.setY(tearDropY);
             teardropIV.setImageAlpha(255);
+            teardropIV.setColorFilter(calculateWaterColor(allowedTime), PorterDuff.Mode.MULTIPLY);
 
+            float animationDistance = waterLevel - tearDropY + topAreaHeight;
             mView.addTearDrop(teardropIV);
-            final Handler handler = new Handler();
-            final int tearFlowRate = random.nextInt(3) + 2;
-            final Runnable positionRunnable = new Runnable() {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(teardropIV, "translationY", animationDistance);
+            animation.setInterpolator(new AccelerateInterpolator());
+
+            int duration = (int) (animationDistance + 500 + random.nextInt(1000));
+
+            animation.setDuration(duration);
+            animation.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void run() {
-                    handler.postDelayed(this, 1);
-                    teardropIV.setY(teardropIV.getY() + tearFlowRate);
-                    if (teardropIV.getY() > waterLevel) {
-                        handler.removeCallbacks(this);
-                        mView.removeTearDrop(teardropIV);
-                    }
+                public void onAnimationStart(Animator animator) {
                 }
-            };
-            handler.post(positionRunnable);
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    mView.removeTearDrop(teardropIV);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+                }
+            });
+            animation.start();
+
         }
         mTearCountdown++;
     }
@@ -167,15 +188,16 @@ public class TearsPresenter implements TearsContract.Presenter {
     }
 
     private void calculatePercentages(Context context, int allowedTime) {
-        float allowedPercentage, currentPercentage;
+        float currentPercentage;
         if (mMillisUsed < allowedTime) {
-            allowedPercentage = TimeUtil.getAllowedPercentageFromTimeOption(allowedTime);
-            currentPercentage = ((float) mMillisUsed / allowedTime) * allowedPercentage;
+            currentPercentage = ((float) mMillisUsed / allowedTime) * TimeUtil.getAllowedPercentageFromTimeOption(allowedTime);
         } else {
             int scaleMaxTime = TimeUtil.getScaleMaxTimeFromExceededUsedTime(mMillisUsed);
-            allowedPercentage = TimeUtil.getAllowedPercentageFromTimeOption(scaleMaxTime);
-            setScale(context, scaleMaxTime);
-            currentPercentage = ((float) mMillisUsed / scaleMaxTime) * allowedPercentage;
+            if (mScaleMaxTime != scaleMaxTime) {
+                mScaleMaxTime = scaleMaxTime;
+                setScale(context, scaleMaxTime);
+            }
+            currentPercentage = ((float) mMillisUsed / scaleMaxTime) * TimeUtil.getAllowedPercentageFromTimeOption(scaleMaxTime);
         }
         mView.setData(currentPercentage, calculateWaterColor(allowedTime),
                 TimeUtil.convertSecondsToExactTimeString(mMillisUsed), calculateEyeOverlayOpacity(mMillisUsed, allowedTime));
@@ -374,6 +396,30 @@ public class TearsPresenter implements TearsContract.Presenter {
             allowedTimeLineView.setY(allowedY);
             allowedTimeLineView.setBackgroundColor(Color.RED);
             mView.createAllowedTimeBar(allowedTimeLineView);
+        }
+    }
+
+    @Override
+    public void createFakeDataHistorical() {
+        if (!Prefs.getBoolean("FAKE_DATA_ADDED", false)) {
+            int[] timeOptions = new int[]{TimeOptions.FIFTEEN_MINS, TimeOptions.THIRTY_MINS,
+                    TimeOptions.FOURTY_FIVE_MINS, TimeOptions.ONE_HOUR, TimeOptions.ONE_HALF_HOUR,
+                    TimeOptions.TWO_HOURS, TimeOptions.TWO_HALF_HOURS, TimeOptions.THREE_HOURS,
+                    TimeOptions.FOUR_HOURS, TimeOptions.FIVE_HOURS, TimeOptions.SIX_HOURS,
+                    TimeOptions.EIGHT_HOURS, TimeOptions.TEN_HOURS, TimeOptions.TWELVE_HOURS,
+                    TimeOptions.FIFTEEN_HOURS, TimeOptions.EIGHTEEN_HOURS, TimeOptions.TWENTY_ONE_HOURS, TimeOptions.TWENTY_FOUR_HOURS};
+            for (int i = 1; i < 100; i++) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE, ((-1) * i));
+                Date date = calendar.getTime();
+                ScreenUsage screenUsage = new ScreenUsage();
+                screenUsage.setDate(TimeUtil.sdf.format(date));
+                screenUsage.setSecondsAllowed(timeOptions[new Random().nextInt(timeOptions.length)]);
+                screenUsage.setSecondsUsed(new Random().nextInt(86400));
+                screenUsage.save();
+            }
+            Prefs.putBoolean("FAKE_DATA_ADDED", true);
         }
     }
 }

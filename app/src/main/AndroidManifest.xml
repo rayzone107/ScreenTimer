@@ -19,13 +19,13 @@
             android:value="screen_timer.db" />
         <meta-data
             android:name="VERSION"
-            android:value="1" />
+            android:value="2" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.rachitgoyal" />
+            android:value="com.rachitgoyal.screentimer" />
 
         <activity
             android:name=".modules.onboarding.OnboardingActivity"

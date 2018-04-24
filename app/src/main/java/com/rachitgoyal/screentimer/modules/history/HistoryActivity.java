@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources.Theme;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.modules.base.BaseActivity;
 import com.rachitgoyal.screentimer.modules.history.day.DayHistoryFragment;
 import com.rachitgoyal.screentimer.modules.history.month.MonthHistoryFragment;
+import com.rachitgoyal.screentimer.modules.history.stats.StatsHistoryFragment;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View {
 
@@ -40,7 +42,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
                 toolbar.getContext(),
                 new String[]{
                         "Day",
-                        "Month"
+                        "Month",
+                        "Statistics"
                 }));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -58,6 +61,11 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
                     case 1:
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container, MonthHistoryFragment.newInstance())
+                                .commit();
+                        break;
+                    case 2:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, StatsHistoryFragment.newInstance())
                                 .commit();
                         break;
                 }
@@ -82,26 +90,22 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-        public MyAdapter(Context context, String[] objects) {
+        MyAdapter(Context context, String[] objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
             mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
         }
 
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             View view;
-
             if (convertView == null) {
-                // Inflate the drop down using the helper's LayoutInflater
                 LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
                 view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             } else {
                 view = convertView;
             }
-
-            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            TextView textView = view.findViewById(android.R.id.text1);
             textView.setText(getItem(position));
-
             return view;
         }
 

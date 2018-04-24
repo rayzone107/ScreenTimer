@@ -23,8 +23,13 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getBaseContext();
 
+        if (!isTaskRoot()) {
+            finish();
+            return;
+        }
+
+        mContext = getBaseContext();
         if (Prefs.getBoolean(Constants.PREFERENCES.PREFS_SHOW_TUTORIAL, true)) {
             setupCards();
         } else {

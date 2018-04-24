@@ -106,7 +106,12 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
 
         chart.setRotationEnabled(true);
         chart.setHighlightPerTapEnabled(true);
-        chart.getLegend().setEnabled(false);
+
+        /*chart.getLegend().setEnabled(true);
+        chart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        chart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        chart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        chart.getLegend().setDrawInside(false);*/
 
         Description description = new Description();
         description.setText("");
@@ -159,7 +164,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
             }
             colors.add(Color.rgb(211, 211, 211));
         }
-
+        setLegendEntries(usedTime, allowedTime);
         mView.setPieData(setPieData(pieValues, colors), screenUsage, pieChange);
         handleArrowState(screenUsage);
     }
@@ -187,12 +192,18 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         return data;
     }
 
-    @Override
-    public List<LegendEntry> getLegendEntries(long usedTime, int allowedTime) {
+    private void setLegendEntries(long usedTime, int allowedTime) {
         List<LegendEntry> legendEntries = new ArrayList<>();
         Legend.LegendForm formShape = Legend.LegendForm.DEFAULT;
         float formSize = 12f;
-        if (usedTime > allowedTime) {
+        if (usedTime == 0) {
+            legendEntries.add(new LegendEntry("Allowed Time\n", formShape, formSize,
+                    Float.NaN, null, Color.rgb(255, 151, 151)));
+            legendEntries.add(new LegendEntry("Glad you didn't go here\n", formShape, formSize,
+                    Float.NaN, null, Color.rgb(186, 5, 5)));
+            legendEntries.add(new LegendEntry("", Legend.LegendForm.NONE, 0,
+                    Float.NaN, null, Color.argb(0, 211, 211, 211)));
+        } else if (usedTime > allowedTime) {
             legendEntries.add(new LegendEntry("Where you were supposed to stop\n", formShape, formSize,
                     Float.NaN, null, Color.rgb(255, 151, 151)));
             legendEntries.add(new LegendEntry("You are going too far\n", formShape, formSize,
@@ -212,7 +223,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
                     Float.NaN, null, Color.argb(0, 211, 211, 211)));
         }
 
-        return legendEntries;
+        mView.setLegend(legendEntries);
     }
 
     @Override
@@ -245,7 +256,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
     @Override
     public long getMinDateForDatePicker() {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
-        Collections.sort(screenUsageList, new StringDateComparator());
+        Collections.sort(screenUsageList, new TimeUtil.StringDateComparator());
 
         ScreenUsage firstScreenUsage = screenUsageList.get(0);
 
@@ -262,7 +273,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
     @Override
     public void handleLeftClick() {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
-        Collections.sort(screenUsageList, new StringDateComparator());
+        Collections.sort(screenUsageList, new TimeUtil.StringDateComparator());
 
         int displayedPosition = screenUsageList.size() - 1;
         for (int i = screenUsageList.size() - 1; i >= 0; i--) {
@@ -288,7 +299,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
     @Override
     public void handleRightClick() {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
-        Collections.sort(screenUsageList, new StringDateComparator());
+        Collections.sort(screenUsageList, new TimeUtil.StringDateComparator());
 
         int displayedPosition = screenUsageList.size() - 1;
         for (int i = 0; i < screenUsageList.size(); i++) {
@@ -313,20 +324,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
 
     private String findFirstDate() {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).orderBy(ScreenUsage.dateField).list();
-        Collections.sort(screenUsageList, new StringDateComparator());
+        Collections.sort(screenUsageList, new TimeUtil.StringDateComparator());
         return screenUsageList.get(0).getDate();
-    }
-
-    class StringDateComparator implements Comparator<ScreenUsage> {
-
-        @Override
-        public int compare(ScreenUsage screenUsage1, ScreenUsage screenUsage2) {
-            try {
-                return TimeUtil.sdf.parse(screenUsage1.getDate()).compareTo(TimeUtil.sdf.parse(screenUsage2.getDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return 0;
-        }
     }
 }

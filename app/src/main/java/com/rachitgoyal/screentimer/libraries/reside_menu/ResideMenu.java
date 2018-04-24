@@ -70,7 +70,7 @@ public class ResideMenu extends FrameLayout {
     private boolean isInIgnoredView = false;
     private int scaleDirection = DIRECTION_LEFT;
     private int pressedState = PRESSED_DOWN;
-    private List<Integer> disabledSwipeDirection = new ArrayList<Integer>();
+    private List<Integer> disabledSwipeDirection = new ArrayList<>();
     // Valid scale factor is between 0.0f and 1.0f.
     private float mScaleValue = 0.5f;
 
@@ -104,7 +104,7 @@ public class ResideMenu extends FrameLayout {
         } else {
             scrollViewLeftMenu = inflater.inflate(
                     R.layout.residemenu_custom_left_scrollview, this, false);
-            layoutLeftMenu = (LinearLayout) scrollViewLeftMenu.findViewById(R.id.layout_left_menu);
+            layoutLeftMenu = scrollViewLeftMenu.findViewById(R.id.layout_left_menu);
         }
 
         if (customRightMenuId >= 0) {
@@ -112,13 +112,13 @@ public class ResideMenu extends FrameLayout {
         } else {
             scrollViewRightMenu = inflater.inflate(
                     R.layout.residemenu_custom_right_scrollview, this, false);
-            layoutRightMenu = (LinearLayout) scrollViewRightMenu.findViewById(R.id.layout_right_menu);
+            layoutRightMenu = scrollViewRightMenu.findViewById(R.id.layout_right_menu);
         }
 
         imageViewShadow = findViewById(R.id.iv_shadow);
         imageViewBackground = findViewById(R.id.iv_background);
 
-        RelativeLayout menuHolder = (RelativeLayout) findViewById(R.id.sv_menu_holder);
+        RelativeLayout menuHolder = findViewById(R.id.sv_menu_holder);
         menuHolder.addView(scrollViewLeftMenu);
         menuHolder.addView(scrollViewRightMenu);
     }
@@ -173,7 +173,7 @@ public class ResideMenu extends FrameLayout {
     /**
      * Set up the activity;
      *
-     * @param activity
+     * @param activity Activity to be attached to
      */
     public void attachToActivity(Activity activity) {
         initValue(activity);
@@ -183,9 +183,9 @@ public class ResideMenu extends FrameLayout {
 
     private void initValue(Activity activity) {
         this.activity = activity;
-        leftMenuItems = new ArrayList<ResideMenuItem>();
-        rightMenuItems = new ArrayList<ResideMenuItem>();
-        ignoredViews = new ArrayList<View>();
+        leftMenuItems = new ArrayList<>();
+        rightMenuItems = new ArrayList<>();
+        ignoredViews = new ArrayList<>();
         viewDecor = (ViewGroup) activity.getWindow().getDecorView();
         viewActivity = new TouchDisableView(this.activity);
 
@@ -213,7 +213,7 @@ public class ResideMenu extends FrameLayout {
     /**
      * Set the background image of menu;
      *
-     * @param imageResource
+     * @param imageResource Background resource
      */
     public void setBackground(int imageResource) {
         imageViewBackground.setImageResource(imageResource);
@@ -222,7 +222,7 @@ public class ResideMenu extends FrameLayout {
     /**
      * The visibility of the shadow under the activity;
      *
-     * @param isVisible
+     * @param isVisible true for visible
      */
     public void setShadowVisible(boolean isVisible) {
         if (isVisible) {
@@ -237,7 +237,7 @@ public class ResideMenu extends FrameLayout {
      * <p/>
      * WARNING: It will be removed from v2.0.
      *
-     * @param menuItem
+     * @param menuItem MenuItem to be added
      */
     @Deprecated
     public void addMenuItem(ResideMenuItem menuItem) {
@@ -248,8 +248,8 @@ public class ResideMenu extends FrameLayout {
     /**
      * Add a single items;
      *
-     * @param menuItem
-     * @param direction
+     * @param menuItem MenuItemto be added
+     * @param direction direction to be added to
      */
     public void addMenuItem(ResideMenuItem menuItem, int direction) {
         if (direction == DIRECTION_LEFT) {
@@ -264,7 +264,7 @@ public class ResideMenu extends FrameLayout {
     /**
      * WARNING: It will be removed from v2.0.
      *
-     * @param menuItems
+     * @param menuItems List of MenuItems
      */
     @Deprecated
     public void setMenuItems(List<ResideMenuItem> menuItems) {
@@ -275,8 +275,8 @@ public class ResideMenu extends FrameLayout {
     /**
      * Set menu items by a array;
      *
-     * @param menuItems
-     * @param direction
+     * @param menuItems List of Menu Items
+     * @param direction Direction
      */
     public void setMenuItems(List<ResideMenuItem> menuItems, int direction) {
         if (direction == DIRECTION_LEFT) {
@@ -306,7 +306,8 @@ public class ResideMenu extends FrameLayout {
     /**
      * WARNING: It will be removed from v2.0.
      *
-     * @return
+     * @return List of ResimeMenu Items
+     * 
      */
     @Deprecated
     public List<ResideMenuItem> getMenuItems() {

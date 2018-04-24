@@ -1,10 +1,9 @@
 package com.rachitgoyal.screentimer.modules.history.month;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +19,17 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.orm.query.Select;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
+import com.rachitgoyal.screentimer.modules.base.BaseFragment;
 import com.rachitgoyal.screentimer.util.TimeUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class MonthHistoryFragment extends Fragment {
+public class MonthHistoryFragment extends BaseFragment {
 
     private LineChart mChart;
-    private Context mContext;
 
     public MonthHistoryFragment() {
     }
@@ -41,7 +41,6 @@ public class MonthHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getActivity().getApplicationContext();
     }
 
     @Override
@@ -56,6 +55,8 @@ public class MonthHistoryFragment extends Fragment {
         mChart.setHighlightPerTapEnabled(true);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
+        mChart.setScaleXEnabled(true);
+        mChart.setScaleYEnabled(true);
         mChart.setPinchZoom(true);
         mChart.setDrawGridBackground(true);
         mChart.setMaxHighlightDistance(300);
@@ -63,9 +64,7 @@ public class MonthHistoryFragment extends Fragment {
 
         setLineData();
         mChart.getLegend().setEnabled(false);
-        mChart.setVisibleXRangeMaximum(10);
-        mChart.setVisibleXRangeMinimum(4);
-        mChart.setVisibleYRangeMinimum(3, YAxis.AxisDependency.LEFT);
+
         mChart.getViewPortHandler().setMaximumScaleX(2f);
         mChart.getViewPortHandler().setMaximumScaleY(2f);
         mChart.animateXY(1000, 1000);
@@ -75,17 +74,22 @@ public class MonthHistoryFragment extends Fragment {
         mChart.setMarker(mv);
 
         mChart.invalidate();
+        mChart.setVisibleXRangeMaximum(8);
+        mChart.setVisibleXRangeMinimum(4);
+        mChart.setVisibleYRangeMinimum(3, YAxis.AxisDependency.LEFT);
         return view;
     }
 
     private void setLineData() {
         List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class).list();
-        final HashMap<Integer, String> xLabels = new HashMap<>();
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
+        Collections.sort(screenUsageList, new TimeUtil.StringDateComparator());
+        Collections.reverse(screenUsageList);
+        @SuppressLint("UseSparseArrays") final HashMap<Integer, String> xLabels = new HashMap<>();
+        ArrayList<Entry> yVals = new ArrayList<>();
         for (int i = 0; i < screenUsageList.size(); i++) {
             ScreenUsage screenUsage = screenUsageList.get(screenUsageList.size() - 1 - i);
             yVals.add(new Entry(i, screenUsage.getSecondsUsed()));
-            xLabels.put(i, screenUsage.getDate());
+            xLabels.put(i, screenUsage.getDate().substring(0, screenUsage.getDate().length() - 5));
         }
 
         LineDataSet set1;
