@@ -6,8 +6,8 @@ android {
         applicationId "com.rachitgoyal.screentimer"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.12"
+        versionCode 5
+        versionName "1.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -38,12 +38,11 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.github.iballan:TimelyView:1.0.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
-    implementation 'biz.kasual:materialnumberpicker:1.2.1'
     implementation 'com.github.florent37:arclayout:1.0.3'
     implementation 'joda-time:joda-time:2.3'
     implementation 'com.pixplicity.easyprefs:library:1.9.0'
     implementation 'com.asksira.android:webviewsuite:1.0.1'
     implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
     implementation 'com.mikhaellopez:circularprogressbar:1.1.1'
-    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.airbnb.android:lottie:2.5.4'
 }

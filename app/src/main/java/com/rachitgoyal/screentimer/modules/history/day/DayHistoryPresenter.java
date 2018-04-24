@@ -1,6 +1,7 @@
 package com.rachitgoyal.screentimer.modules.history.day;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
@@ -28,7 +29,6 @@ import com.rachitgoyal.screentimer.util.TimeUtil;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -88,7 +88,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
     }
 
     @Override
-    public void setupChart(PieChart chart) {
+    public void setupChart(PieChart chart, int orientation) {
         chart.setUsePercentValues(false);
         chart.setExtraOffsets(10, 10, 10, 10);
 
@@ -103,15 +103,27 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         chart.setTransparentCircleRadius(50f);
 
         chart.setDrawCenterText(true);
+        chart.setCenterTextSize(orientation == Configuration.ORIENTATION_LANDSCAPE ? 9 : 13);
+        chart.setEntryLabelTextSize(orientation == Configuration.ORIENTATION_LANDSCAPE ? 9 : 13);
+        chart.setEntryLabelColor(Color.BLACK);
 
         chart.setRotationEnabled(true);
         chart.setHighlightPerTapEnabled(true);
 
-        /*chart.getLegend().setEnabled(true);
-        chart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        chart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        chart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        chart.getLegend().setDrawInside(false);*/
+        Legend legend = chart.getLegend();
+        legend.setEnabled(true);
+        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setTextSize(12);
+        legend.setTextColor(Color.BLACK);
+        legend.setYEntrySpace(10);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        } else {
+            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        }
 
         Description description = new Description();
         description.setText("");
@@ -141,12 +153,13 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
             exceededTime = usedTime - allowedTime;
             maxTime = TimeUtil.getScaleMaxTimeFromExceededUsedTime(usedTime) - usedTime;
 
-            pieValues.add(new PieEntry(allowedTime, TimeUtil.convertSecondsToApproximateTimeString(allowedTime)));
+            PieEntry pieEntry1 = new PieEntry(allowedTime, TimeUtil.convertSecondsToApproximateTimeString(allowedTime));
+            pieValues.add(pieEntry1);
             pieValues.add(new PieEntry(exceededTime, TimeUtil.convertSecondsToApproximateTimeString(exceededTime)));
             pieValues.add(new PieEntry(maxTime, ""));
 
             colors.add(Color.rgb(255, 151, 151));
-            colors.add(Color.rgb(186, 5, 5));
+            colors.add(Color.rgb(224, 8, 8));
             colors.add(Color.rgb(211, 211, 211));
         } else {
             leftTime = (screenUsage.getSecondsAllowed() - screenUsage.getSecondsUsed());
@@ -164,7 +177,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
             }
             colors.add(Color.rgb(211, 211, 211));
         }
-        setLegendEntries(usedTime, allowedTime);
+        setLegendEntries(usedTime, allowedTime, colors, mDisplayedDate.equals(TimeUtil.sdf.format(new Date())));
         mView.setPieData(setPieData(pieValues, colors), screenUsage, pieChange);
         handleArrowState(screenUsage);
     }
@@ -186,41 +199,41 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
-        data.setValueTextColor(Color.BLACK);
+        data.setValueTextColor(Color.rgb(211, 211, 211));
         data.setDrawValues(false);
 
         return data;
     }
 
-    private void setLegendEntries(long usedTime, int allowedTime) {
+    private void setLegendEntries(long usedTime, int allowedTime, ArrayList<Integer> colors, boolean isToday) {
         List<LegendEntry> legendEntries = new ArrayList<>();
         Legend.LegendForm formShape = Legend.LegendForm.DEFAULT;
         float formSize = 12f;
         if (usedTime == 0) {
             legendEntries.add(new LegendEntry("Allowed Time\n", formShape, formSize,
-                    Float.NaN, null, Color.rgb(255, 151, 151)));
+                    Float.NaN, null, colors.get(0)));
             legendEntries.add(new LegendEntry("Glad you didn't go here\n", formShape, formSize,
-                    Float.NaN, null, Color.rgb(186, 5, 5)));
+                    Float.NaN, null, colors.get(1)));
             legendEntries.add(new LegendEntry("", Legend.LegendForm.NONE, 0,
-                    Float.NaN, null, Color.argb(0, 211, 211, 211)));
+                    Float.NaN, null, Color.TRANSPARENT));
         } else if (usedTime > allowedTime) {
             legendEntries.add(new LegendEntry("Where you were supposed to stop\n", formShape, formSize,
-                    Float.NaN, null, Color.rgb(255, 151, 151)));
-            legendEntries.add(new LegendEntry("You are going too far\n", formShape, formSize,
-                    Float.NaN, null, Color.rgb(186, 5, 5)));
-            legendEntries.add(new LegendEntry("You really shouldn't go here", formShape, formSize,
-                    Float.NaN, null, Color.rgb(211, 211, 211)));
+                    Float.NaN, null, colors.get(0)));
+            legendEntries.add(new LegendEntry(isToday ? "You are going too far\n" : "You went too far\n", formShape, formSize,
+                    Float.NaN, null, colors.get(1)));
+            legendEntries.add(new LegendEntry(isToday ? "You really shouldn't go here" : "Glad you didn't go here\n", formShape, formSize,
+                    Float.NaN, null, colors.get(2)));
             legendEntries.add(new LegendEntry("", Legend.LegendForm.NONE, 0,
-                    Float.NaN, null, Color.argb(0, 211, 211, 211)));
+                    Float.NaN, null, Color.TRANSPARENT));
         } else {
-            legendEntries.add(new LegendEntry("Damage to your eyes so far\n", formShape, formSize,
-                    Float.NaN, null, Color.rgb(255, 151, 151)));
-            legendEntries.add(new LegendEntry("You can go this much more\n", formShape, formSize,
-                    Float.NaN, null, Color.GREEN));
+            legendEntries.add(new LegendEntry(isToday ? "Damage to your eyes so far\n" : "Damage to your eyes\n", formShape, formSize,
+                    Float.NaN, null, colors.get(0)));
+            legendEntries.add(new LegendEntry(isToday ? "You can go this much more\n" : "Glad you saved your eyes from this bit\n", formShape, formSize,
+                    Float.NaN, null, colors.get(1)));
             legendEntries.add(new LegendEntry("Danger Zone", formShape, formSize,
-                    Float.NaN, null, Color.rgb(211, 211, 211)));
+                    Float.NaN, null, colors.get(2)));
             legendEntries.add(new LegendEntry("", Legend.LegendForm.NONE, 0,
-                    Float.NaN, null, Color.argb(0, 211, 211, 211)));
+                    Float.NaN, null, Color.TRANSPARENT));
         }
 
         mView.setLegend(legendEntries);
@@ -319,6 +332,13 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         if (displayedPosition != screenUsageList.size() - 1) {
             ScreenUsage previousUsage = screenUsageList.get(displayedPosition + 1);
             setPieValues(previousUsage, PieChange.RIGHT_SLIDE);
+        }
+    }
+
+    @Override
+    public void updateData() {
+        if (mDisplayedDate.equals(TimeUtil.sdf.format(new Date()))) {
+            fetchTodayData();
         }
     }
 

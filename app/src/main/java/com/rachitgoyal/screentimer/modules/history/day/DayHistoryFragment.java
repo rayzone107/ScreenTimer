@@ -3,7 +3,6 @@ package com.rachitgoyal.screentimer.modules.history.day;
 import android.animation.Animator;
 import android.app.DatePickerDialog;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -12,17 +11,17 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.florent37.arclayout.ArcLayout;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.rachitgoyal.screentimer.R;
+import com.rachitgoyal.screentimer.libraries.swipe_detection.SwipeDetector;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
 import com.rachitgoyal.screentimer.modules.base.BaseFragment;
 import com.rachitgoyal.screentimer.service.TimeChangeBroadcastReceiver;
@@ -43,6 +42,10 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
     private TimeChangeBroadcastReceiver mTimeChangeReceiver;
     private DayHistoryContract.Presenter mPresenter;
     private DatePickerDialog mDatePickerDialog;
+    private boolean mIsDateSet = false;
+
+    @BindView(R.id.parent_rl)
+    RelativeLayout mParentRL;
 
     @BindView(R.id.arc_top)
     ArcLayout mArcTop;
@@ -52,9 +55,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
 
     @BindView(R.id.date_tv)
     TextView mDateTV;
-
-    @BindView(R.id.date_container)
-    LinearLayout mDateContainer;
 
     @BindView(R.id.emoticon_iv)
     ImageView mEmoticonIV;
@@ -96,8 +96,9 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
             mDatePickerDialog.getDatePicker().setMinDate(minDate);
         }
         mDatePickerDialog.getDatePicker().setMaxDate((new Date()).getTime());
+        mDatePickerDialog.setTitle(null);
 
-        mDateContainer.setOnClickListener(new View.OnClickListener() {
+        mDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mDatePickerDialog.show();
@@ -107,6 +108,7 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         mLeftArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mIsDateSet = false;
                 mPresenter.handleLeftClick();
             }
         });
@@ -114,11 +116,30 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
         mRightArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mIsDateSet = false;
                 mPresenter.handleRightClick();
             }
         });
 
-        mPresenter.setupChart(mPieChart);
+        mParentRL.setOnTouchListener(new SwipeDetector() {
+            @Override
+            public void leftSwipe() {
+                super.leftSwipe();
+                if (mRightArrow.getVisibility() == View.VISIBLE) {
+                    mRightArrow.performClick();
+                }
+            }
+
+            @Override
+            public void rightSwipe() {
+                super.rightSwipe();
+                if (mLeftArrow.getVisibility() == View.VISIBLE) {
+                    mLeftArrow.performClick();
+                }
+            }
+        });
+
+        mPresenter.setupChart(mPieChart, getActivity().getResources().getConfiguration().orientation);
         mPresenter.fetchTodayData();
         return view;
     }
@@ -146,7 +167,11 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
             Calendar calendar = Calendar.getInstance();
             Date date = TimeUtil.sdf.parse(screenUsage.getDate());
             calendar.setTime(date);
-            mDatePickerDialog.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            if (!mIsDateSet) {
+                mDatePickerDialog.updateDate(calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                mIsDateSet = true;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -194,7 +219,6 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
     }
 
     private void setPieDateWithoutAnimation(PieData data, ScreenUsage screenUsage) {
-        mPieChart.setEntryLabelColor(Color.rgb(41, 74, 98));
         mPieChart.setData(data);
         mPieChart.setCenterText(mPresenter.generateCenterSpannableText(mContext, screenUsage.getSecondsUsed()));
         mPieChart.invalidate();
@@ -204,29 +228,20 @@ public class DayHistoryFragment extends BaseFragment implements DayHistoryContra
 
     @Override
     public void setLegend(List<LegendEntry> legendEntries) {
-        Legend legend = mPieChart.getLegend();
-        legend.setEnabled(true);
-        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        legend.setTextSize(12);
-        legend.setTextColor(Color.BLACK);
-        legend.setYEntrySpace(10);
-
         mPieChart.getLegend().setCustom(legendEntries);
     }
 
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        mIsDateSet = false;
         mDatePickerDialog.dismiss();
         mPresenter.fetchData(year, month, day);
     }
 
     @Override
     public void setData() {
-//        mPresenter.updateData();
+        mPresenter.updateData();
     }
 
     @Override

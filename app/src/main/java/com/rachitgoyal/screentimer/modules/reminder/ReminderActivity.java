@@ -132,6 +132,15 @@ public class ReminderActivity extends BaseActivity implements ReminderContract.V
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mExpansionContent.isExpanded()) {
+            mExpansionContent.collapse(false);
+        }
+        mShadowView.setVisibility(View.GONE);
+    }
+
     @OnClick(R.id.action_delete)
     public void deleteClicked(View view) {
         toggleActionMode(true);

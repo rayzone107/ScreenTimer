@@ -61,8 +61,8 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
             card.setBackgroundColor(R.color.black_transparent);
             card.setTitleColor(R.color.white);
             card.setDescriptionColor(R.color.white);
-            card.setTitleTextSize(ModelUtil.dp2px(mContext, 12));
-            card.setDescriptionTextSize(ModelUtil.dp2px(mContext, 8));
+            card.setTitleTextSize(ModelUtil.dp2px(mContext, 10));
+            card.setDescriptionTextSize(ModelUtil.dp2px(mContext, 6));
         }
 
         setOnboardPages(pages);

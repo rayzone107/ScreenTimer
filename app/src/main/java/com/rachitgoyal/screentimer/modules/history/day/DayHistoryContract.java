@@ -26,7 +26,7 @@ public class DayHistoryContract {
     }
 
     public interface Presenter {
-        void setupChart(PieChart chart);
+        void setupChart(PieChart chart, int orientation);
 
         void fetchTodayData();
 
@@ -41,5 +41,7 @@ public class DayHistoryContract {
         void handleLeftClick();
 
         void handleRightClick();
+
+        void updateData();
     }
 }

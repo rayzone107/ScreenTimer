@@ -70,6 +70,8 @@
     <string name="mins">MINS</string>
     <string name="hours">HOURS</string>
     <string name="days">DAYS</string>
+    <string name="total_exceeded_time">Total Exceeded Time</string>
+    <string name="not_enough_data">Not enough data yet. \nGive us some time to know you better.</string>
     <!--My Settings-->
 
 </resources>

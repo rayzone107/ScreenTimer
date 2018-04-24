@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/parent_rl"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
@@ -11,9 +12,10 @@
         android:id="@+id/arc_top"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:background="@color/white"
         android:elevation="5dp"
         app:arc_cropDirection="cropOutside"
-        app:arc_height="80dp"
+        app:arc_height="40dp"
         app:arc_position="bottom">
 
         <View
@@ -21,37 +23,24 @@
             android:layout_height="match_parent"
             android:background="#1798e2" />
 
-        <LinearLayout
-            android:id="@+id/date_container"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@drawable/date_bg"
-            android:elevation="4dp"
+            android:drawableLeft="@drawable/ic_date_range_black"
+            android:drawablePadding="20dp"
             android:foreground="?attr/selectableItemBackground"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_bg_white"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                app:srcCompat="@drawable/ic_date_range_black"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/date_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="#000"
-                android:textSize="16sp"
-                tools:text="27/08/2018" />
-
-        </LinearLayout>
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="20dp"
+            android:paddingTop="8dp"
+            android:textColor="#000"
+            android:textSize="14sp"
+            tools:text="27/08/2018" />
 
     </com.github.florent37.arclayout.ArcLayout>
 
@@ -59,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/arc_bottom"
-        android:layout_below="@id/arc_top">
+        android:layout_below="@id/arc_top"
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/left_arrow_iv"
@@ -96,11 +86,11 @@
     <com.github.florent37.arclayout.ArcLayout
         android:id="@+id/arc_bottom"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:elevation="5dp"
         app:arc_cropDirection="cropOutside"
-        app:arc_height="50dp"
+        app:arc_height="30dp"
         app:arc_position="top">
 
         <View
@@ -110,8 +100,8 @@
 
         <ImageView
             android:id="@+id/emoticon_iv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:src="@drawable/neutral" />
 

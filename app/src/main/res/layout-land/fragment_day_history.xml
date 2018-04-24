@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/parent_rl"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
@@ -24,46 +25,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_marginBottom="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/date_container"
-                android:layout_width="180dp"
-                android:layout_height="40dp"
+            <TextView
+                android:id="@+id/date_tv"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/date_bg"
                 android:layout_marginRight="30dp"
-                android:elevation="4dp"
+                android:background="@drawable/date_bg"
+                android:drawableLeft="@drawable/ic_date_range_black"
+                android:drawablePadding="20dp"
                 android:foreground="?attr/selectableItemBackground"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rounded_bg_white"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    app:srcCompat="@drawable/ic_date_range_black"
-                    tools:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/date_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    tools:text="27/08/2018" />
-
-            </LinearLayout>
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="20dp"
+                android:paddingTop="8dp"
+                android:textColor="#000"
+                android:textSize="14sp"
+                tools:text="27/08/2018" />
 
             <ImageView
                 android:id="@+id/emoticon_iv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/neutral" />
 
@@ -98,6 +86,8 @@
             android:id="@+id/timer_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             android:layout_toLeftOf="@id/right_arrow_iv"
             android:layout_toRightOf="@id/left_arrow_iv">
 

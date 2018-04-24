@@ -7,7 +7,6 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +28,7 @@ import butterknife.ButterKnife;
 public class StatsHistoryFragment extends BaseFragment {
 
     private static final float SECONDS_IN_A_DAY = 86400;
+    private final int ANIMATION_DURATION = 500;
 
     @BindView(R.id.stats_cv)
     CardView mHeaderCV;
@@ -68,6 +68,14 @@ public class StatsHistoryFragment extends BaseFragment {
     TextView mHoursTV;
     @BindView(R.id.mins_tv)
     TextView mMinsTV;
+    @BindView(R.id.exceeded_time_ll)
+    LinearLayout mExceededTimeLL;
+    @BindView(R.id.exceeded_days_tv)
+    TextView mExceededDaysTV;
+    @BindView(R.id.exceeded_hours_tv)
+    TextView mExceededHoursTV;
+    @BindView(R.id.exceeded_mins_tv)
+    TextView mExceededMinsTV;
     @BindView(R.id.percent_time_ll)
     LinearLayout mPercentTimeLL;
     @BindView(R.id.average_percentage_tv)
@@ -107,7 +115,9 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void calculateValues() {
-        long totalUsage = 0, averageUsage = 0, maxUsage = 0, minUsage = Long.MAX_VALUE, numberOfDays = 0, numberOfRedDays = 0, numberOfGreenDays = 0;
+        long totalUsage = 0, averageUsage = 0, maxUsage = 0, minUsage = Long.MAX_VALUE;
+        long numberOfDays = 0, numberOfRedDays = 0, numberOfGreenDays = 0;
+        long exceededSecs = 0;
         String maxUsageDate = "", minUsageDate = "";
 
         List<ScreenUsage> screenUsages = Select.from(ScreenUsage.class).list();
@@ -124,17 +134,18 @@ public class StatsHistoryFragment extends BaseFragment {
                 minUsageDate = screenUsage.getDate();
             }
             if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
+                exceededSecs += screenUsage.getSecondsUsed() - screenUsage.getSecondsAllowed();
                 numberOfRedDays++;
             } else {
                 numberOfGreenDays++;
             }
         }
         averageUsage = totalUsage / numberOfDays;
-        setData(totalUsage, averageUsage, maxUsage, maxUsageDate, minUsage, minUsageDate, numberOfDays, numberOfRedDays, numberOfGreenDays);
+        setData(totalUsage, averageUsage, maxUsage, maxUsageDate, minUsage, minUsageDate, exceededSecs, numberOfDays, numberOfRedDays, numberOfGreenDays);
     }
 
-    private void setData(long totalUsage, long averageUsage, long maxUsage, String maxUsageDate, long minUsage, String minUsageDate, long numberOfDays,
-                         long numberOfRedDays, long numberOfGreenDays) {
+    private void setData(long totalUsage, long averageUsage, long maxUsage, String maxUsageDate, long minUsage, String minUsageDate, long exceededSecs,
+                         long numberOfDays, long numberOfRedDays, long numberOfGreenDays) {
 
         mAverageUsageTV.setText(TimeUtil.convertSecondsToExactTimeString(averageUsage));
 
@@ -153,6 +164,15 @@ public class StatsHistoryFragment extends BaseFragment {
         mMinsTV.setText(String.valueOf(mins));
 
         mAveragePercentageTV.setText(String.format("%s %%", String.format(Locale.getDefault(), "%.2f", (float) averageUsage / 86400)));
+
+        int exceededDays = (int) (exceededSecs / 86400);
+        int exceededHours = (int) ((exceededSecs - (exceededDays * 86400)) / 3600);
+        int exceededMins = (int) ((exceededSecs - (exceededDays * 86400) - (exceededHours * 3600)) / 60);
+
+        mExceededDaysTV.setText(String.valueOf(exceededDays));
+        mExceededHoursTV.setText(String.valueOf(exceededHours));
+        mExceededMinsTV.setText(String.valueOf(exceededMins));
+
         mRedDayCountTV.setText(String.valueOf(numberOfRedDays));
         mGreenDayCountTV.setText(String.valueOf(numberOfGreenDays));
         mTotalDaysTV.setText(String.valueOf(numberOfDays));
@@ -176,7 +196,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateAverageCV(final long averageUsage, final long maxUsage, final long minUsage) {
-        YoYo.with(Techniques.ZoomIn).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.ZoomIn).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mAverageUsageCV.setVisibility(View.VISIBLE);
@@ -192,7 +212,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateMaxMinCV(final long maxUsage, final long minUsage) {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mMaxUsageCV.setVisibility(View.VISIBLE);
@@ -203,7 +223,7 @@ public class StatsHistoryFragment extends BaseFragment {
                 mMaxUsagePB.setProgressWithAnimation((maxUsage / SECONDS_IN_A_DAY) * 100, 800);
             }
         }).playOn(mMaxUsageCV);
-        YoYo.with(Techniques.SlideInRight).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInRight).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mMinUsageCV.setVisibility(View.VISIBLE);
@@ -219,7 +239,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateOtherStatsCV() {
-        YoYo.with(Techniques.BounceInUp).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.BounceInUp).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mOtherStatsCV.setVisibility(View.VISIBLE);
@@ -229,7 +249,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateTotalUsageItem() {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mTotalUsageLL.setVisibility(View.VISIBLE);
@@ -243,7 +263,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animatePercentTimeItem() {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mPercentTimeLL.setVisibility(View.VISIBLE);
@@ -251,13 +271,27 @@ public class StatsHistoryFragment extends BaseFragment {
         }).onEnd(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
-                animateRedDaysItem();
+                animateExceededTimeItem();
             }
         }).playOn(mPercentTimeLL);
     }
 
+    private void animateExceededTimeItem() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+                mExceededTimeLL.setVisibility(View.VISIBLE);
+            }
+        }).onEnd(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+                animateRedDaysItem();
+            }
+        }).playOn(mExceededTimeLL);
+    }
+
     private void animateRedDaysItem() {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mRedDaysLL.setVisibility(View.VISIBLE);
@@ -271,7 +305,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateGreenDaysItem() {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mGreenDaysLL.setVisibility(View.VISIBLE);
@@ -285,7 +319,7 @@ public class StatsHistoryFragment extends BaseFragment {
     }
 
     private void animateTotalDaysItem() {
-        YoYo.with(Techniques.SlideInLeft).duration(600).onStart(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.SlideInLeft).duration(ANIMATION_DURATION).onStart(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
                 mTotalDaysLL.setVisibility(View.VISIBLE);
