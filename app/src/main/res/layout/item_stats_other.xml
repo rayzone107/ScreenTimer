@@ -38,77 +38,16 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <com.rachitgoyal.durationitem.DurationView
+                android:id="@+id/total_dv"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                app:dv_label_color="@color/dark_gray"
+                app:dv_label_text_size="8sp"
+                app:dv_label_vertical_padding="4dp"
+                app:dv_number_text_size="14sp"
+                app:dv_show_secs="false" />
 
-                <TextView
-                    android:id="@+id/days_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/days_title_tv"
-                    android:layout_alignRight="@id/days_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="3" />
-
-                <TextView
-                    android:id="@+id/days_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/days_tv"
-                    android:layout_marginRight="4dp"
-                    android:text="@string/days"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:id="@+id/hours_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/hours_title_tv"
-                    android:layout_alignRight="@id/hours_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="12" />
-
-                <TextView
-                    android:id="@+id/hours_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/hours_tv"
-                    android:layout_marginRight="4dp"
-                    android:layout_toRightOf="@id/days_title_tv"
-                    android:text="@string/hours"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:id="@+id/mins_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/mins_title_tv"
-                    android:layout_alignRight="@id/mins_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="37" />
-
-                <TextView
-                    android:id="@+id/mins_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/mins_tv"
-                    android:layout_toRightOf="@id/hours_title_tv"
-                    android:text="@string/mins"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -155,78 +94,16 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <com.rachitgoyal.durationitem.DurationView
+                android:id="@+id/exceeded_dv"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                app:dv_label_color="@color/dark_gray"
+                app:dv_label_text_size="8sp"
+                app:dv_label_vertical_padding="4dp"
+                app:dv_number_text_size="14sp"
+                app:dv_show_secs="false" />
 
-                <TextView
-                    android:id="@+id/exceeded_days_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/exceeded_days_title_tv"
-                    android:layout_alignRight="@id/exceeded_days_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="3" />
-
-                <TextView
-                    android:id="@+id/exceeded_days_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/exceeded_days_tv"
-                    android:layout_marginRight="4dp"
-                    android:text="@string/days"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:id="@+id/exceeded_hours_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/exceeded_hours_title_tv"
-                    android:layout_alignRight="@id/exceeded_hours_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="12" />
-
-                <TextView
-                    android:id="@+id/exceeded_hours_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/exceeded_hours_tv"
-                    android:layout_marginRight="4dp"
-                    android:layout_toRightOf="@id/exceeded_days_title_tv"
-                    android:text="@string/hours"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:id="@+id/exceeded_mins_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/exceeded_mins_title_tv"
-                    android:layout_alignRight="@id/exceeded_mins_title_tv"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="37" />
-
-                <TextView
-                    android:id="@+id/exceeded_mins_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/exceeded_mins_tv"
-                    android:layout_toRightOf="@id/exceeded_hours_title_tv"
-                    android:text="@string/mins"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="8sp" />
-
-            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout

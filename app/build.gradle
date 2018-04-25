@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.rachitgoyal.screentimer"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 5
         versionName "1.13"
@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
     implementation 'com.mikhaellopez:circularprogressbar:1.1.1'
     implementation 'com.airbnb.android:lottie:2.5.4'
+    implementation 'com.github.rayzone107:durationview:0.0.1'
 }

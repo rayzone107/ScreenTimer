@@ -15,6 +15,7 @@
     <color name="disabled_text">#cecece</color>
     <color name="light_gray">#32eeeeee</color>
     <color name="medium_gray">#c7c7c7</color>
+    <color name="dark_gray">#848484</color>
     <color name="shimmer_color">#b7d4d4d4</color>
     <color name="reminder_shadow">#64000000</color>
 </resources>

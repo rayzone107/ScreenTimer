@@ -14,6 +14,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.orm.query.Select;
+import com.rachitgoyal.durationitem.DurationView;
 import com.rachitgoyal.screentimer.R;
 import com.rachitgoyal.screentimer.model.ScreenUsage;
 import com.rachitgoyal.screentimer.modules.base.BaseFragment;
@@ -62,20 +63,13 @@ public class StatsHistoryFragment extends BaseFragment {
     CardView mOtherStatsCV;
     @BindView(R.id.total_usage_ll)
     LinearLayout mTotalUsageLL;
-    @BindView(R.id.days_tv)
-    TextView mDaysTV;
-    @BindView(R.id.hours_tv)
-    TextView mHoursTV;
-    @BindView(R.id.mins_tv)
-    TextView mMinsTV;
+    @BindView(R.id.total_dv)
+    DurationView mTotalDV;
+
     @BindView(R.id.exceeded_time_ll)
     LinearLayout mExceededTimeLL;
-    @BindView(R.id.exceeded_days_tv)
-    TextView mExceededDaysTV;
-    @BindView(R.id.exceeded_hours_tv)
-    TextView mExceededHoursTV;
-    @BindView(R.id.exceeded_mins_tv)
-    TextView mExceededMinsTV;
+    @BindView(R.id.exceeded_dv)
+    DurationView mExceededDV;
     @BindView(R.id.percent_time_ll)
     LinearLayout mPercentTimeLL;
     @BindView(R.id.average_percentage_tv)
@@ -155,29 +149,25 @@ public class StatsHistoryFragment extends BaseFragment {
         mMinUsageTV.setText(TimeUtil.convertSecondsToExactTimeString(minUsage));
         mMinUsageDateTV.setText(minUsageDate);
 
-        int days = (int) (totalUsage / 86400);
-        int hours = (int) ((totalUsage - (days * 86400)) / 3600);
-        int mins = (int) ((totalUsage - (days * 86400) - (hours * 3600)) / 60);
-
-        mDaysTV.setText(String.valueOf(days));
-        mHoursTV.setText(String.valueOf(hours));
-        mMinsTV.setText(String.valueOf(mins));
+        setDVWithSplitTimeIntoDaysHourMins(mTotalDV, totalUsage);
+        setDVWithSplitTimeIntoDaysHourMins(mExceededDV, exceededSecs);
 
         mAveragePercentageTV.setText(String.format("%s %%", String.format(Locale.getDefault(), "%.2f", (float) averageUsage / 86400)));
-
-        int exceededDays = (int) (exceededSecs / 86400);
-        int exceededHours = (int) ((exceededSecs - (exceededDays * 86400)) / 3600);
-        int exceededMins = (int) ((exceededSecs - (exceededDays * 86400) - (exceededHours * 3600)) / 60);
-
-        mExceededDaysTV.setText(String.valueOf(exceededDays));
-        mExceededHoursTV.setText(String.valueOf(exceededHours));
-        mExceededMinsTV.setText(String.valueOf(exceededMins));
-
         mRedDayCountTV.setText(String.valueOf(numberOfRedDays));
         mGreenDayCountTV.setText(String.valueOf(numberOfGreenDays));
         mTotalDaysTV.setText(String.valueOf(numberOfDays));
 
         animateEntryViews(averageUsage, maxUsage, minUsage);
+    }
+
+    private void setDVWithSplitTimeIntoDaysHourMins(DurationView durationView, long secs) {
+        int days = (int) (secs / 86400);
+        int hours = (int) ((secs - (days * 86400)) / 3600);
+        int mins = (int) ((secs - (days * 86400) - (hours * 3600)) / 60);
+
+        durationView.setDays(days);
+        durationView.setHours(hours);
+        durationView.setMins(mins);
     }
 
     private void animateEntryViews(final long averageUsage, final long maxUsage, final long minUsage) {
