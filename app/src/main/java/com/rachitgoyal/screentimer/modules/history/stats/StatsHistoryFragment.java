@@ -152,7 +152,7 @@ public class StatsHistoryFragment extends BaseFragment {
         setDVWithSplitTimeIntoDaysHourMins(mTotalDV, totalUsage);
         setDVWithSplitTimeIntoDaysHourMins(mExceededDV, exceededSecs);
 
-        mAveragePercentageTV.setText(String.format("%s %%", String.format(Locale.getDefault(), "%.2f", (float) averageUsage / 86400)));
+        mAveragePercentageTV.setText(String.format("%s %%", String.format(Locale.getDefault(), "%.2f", (float) averageUsage / 86400 * 100)));
         mRedDayCountTV.setText(String.valueOf(numberOfRedDays));
         mGreenDayCountTV.setText(String.valueOf(numberOfGreenDays));
         mTotalDaysTV.setText(String.valueOf(numberOfDays));

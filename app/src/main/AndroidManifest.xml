@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".GazeAway"
@@ -79,7 +80,7 @@
 
         <service
             android:name=".service.ScreenTimerService"
-            android:enabled="true"/>
+            android:enabled="true" />
 
         <receiver
             android:name=".service.BootReceiver"
@@ -89,6 +90,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".service.RestartServiceReceiver">
+            <intent-filter>
+                <action android:name="com.rachitgoyal.servicedestroyed">
+                </action>
+            </intent-filter>
+        </receiver>
+
 
     </application>
 </manifest>

@@ -30,15 +30,15 @@ public class WebViewActivity extends BaseActivity {
 
             switch (type) {
                 case FAQs:
-                    loadURL("http://rachitgoyal.com/faqs.html");
+                    loadURL("http://www.rachitgoyal.com/faqs.html");
                     setTitle("FAQs");
                     break;
                 case TERMS_AND_CONDITIONS:
-                    loadURL("http://rachitgoyal.com/terms_and_conditions.html");
+                    loadURL("http://www.rachitgoyal.com/terms_and_conditions.html");
                     setTitle("Terms and Conditions");
                     break;
                 case PRIVACY_POLICY:
-                    loadURL("http://rachitgoyal.com/privacy_policy.html");
+                    loadURL("http://www.rachitgoyal.com/privacy_policy.html");
                     setTitle("Privacy Policy");
                     break;
             }

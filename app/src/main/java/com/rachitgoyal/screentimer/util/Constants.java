@@ -38,6 +38,7 @@ public class Constants {
         String STARTFOREGROUND_ACTION = "com.rachitgoyal.foregroundservice.action.startforeground";
         String STOP_SERVICE = "com.rachitgoyal.stopservice";
         String UPDATE_TIMER = "com.rachitgoyal.updatetimer";
+        String SERVICE_DESTROYED = "com.rachitgoyal.servicedestroyed";
     }
 
     public interface NOTIFICATION_ID {

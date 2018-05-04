@@ -96,6 +96,7 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
 
         chart.setDrawHoleEnabled(true);
         chart.setHoleColor(Color.TRANSPARENT);
+        chart.setTouchEnabled(false);
 
         chart.setTransparentCircleColor(Color.WHITE);
 
@@ -107,8 +108,8 @@ public class DayHistoryPresenter implements DayHistoryContract.Presenter {
         chart.setEntryLabelTextSize(orientation == Configuration.ORIENTATION_LANDSCAPE ? 9 : 13);
         chart.setEntryLabelColor(Color.BLACK);
 
-        chart.setRotationEnabled(true);
-        chart.setHighlightPerTapEnabled(true);
+        chart.setRotationEnabled(false);
+        chart.setHighlightPerTapEnabled(false);
 
         Legend legend = chart.getLegend();
         legend.setEnabled(true);

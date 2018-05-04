@@ -77,7 +77,17 @@ public class TearsPresenter implements TearsContract.Presenter {
     public void setData(Context context) {
         setDefaultMaxThreshold();
         int allowedTime = getAllowedTime();
-        setScale(context, allowedTime);
+        int scaleMaxTime = allowedTime;
+        List<ScreenUsage> screenUsageList = Select.from(ScreenUsage.class)
+                .where(Condition.prop(ScreenUsage.dateField).eq(TimeUtil.getDateAsFormattedString(new Date()))).limit("1").list();
+        ScreenUsage screenUsage;
+        if (!screenUsageList.isEmpty()) {
+            screenUsage = screenUsageList.get(0);
+            if (screenUsage.getSecondsUsed() > screenUsage.getSecondsAllowed()) {
+                scaleMaxTime = TimeUtil.getScaleMaxTimeFromExceededUsedTime(screenUsage.getSecondsUsed());
+            }
+        }
+        setScale(context, scaleMaxTime);
         addDefaultReminder(allowedTime);
         calculateData(context, allowedTime);
     }
@@ -371,10 +381,12 @@ public class TearsPresenter implements TearsContract.Presenter {
     private void addBar(Context context, LayoutParams layoutParams, List<TextView> scaleBars, String text) {
         TextView halfBar = new TextView(context);
         halfBar.setLayoutParams(layoutParams);
+        halfBar.setTextColor(Color.DKGRAY);
         halfBar.setText(" - ");
         scaleBars.add(halfBar);
         TextView textBar = new TextView(context);
         textBar.setLayoutParams(layoutParams);
+        textBar.setTextColor(Color.DKGRAY);
         textBar.setText(text);
         scaleBars.add(textBar);
     }

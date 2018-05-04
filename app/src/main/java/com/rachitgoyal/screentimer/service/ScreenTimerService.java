@@ -1,5 +1,6 @@
 package com.rachitgoyal.screentimer.service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;
@@ -245,6 +247,16 @@ public class ScreenTimerService extends Service implements StopServiceReceiver.S
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Intent startIntent = new Intent(getApplicationContext(), ScreenTimerService.class);
+        startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 1, startIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 5000, pendingIntent);
+        super.onTaskRemoved(rootIntent);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mScreenStateReceiver != null) {
@@ -253,5 +265,7 @@ public class ScreenTimerService extends Service implements StopServiceReceiver.S
         if (mStopServiceReceiver != null) {
             unregisterReceiver(mStopServiceReceiver);
         }
+
+        sendBroadcast(new Intent(Constants.ACTION.SERVICE_DESTROYED));
     }
 }
